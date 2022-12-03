@@ -10,7 +10,7 @@ class Allround3ApplicationTests {
 
 	@Test
 	void temporaryTest(){
-		assertThat(4-1).isEqualTo(3);
+		assertThat(4-2).isEqualTo(2);
 	}
 
 }

@@ -17,10 +17,15 @@ jobs:
       - name: make application.yml
         run:
           cd ./src/main
+          
           mkdir resources
+          
           cd ./resources
+          
           touch ./application.yml
+          
           echo "${{ secrets.APPLICATION_YML}}" > ./application.yml
+
         shell: bash
 
       - name: Setup Java

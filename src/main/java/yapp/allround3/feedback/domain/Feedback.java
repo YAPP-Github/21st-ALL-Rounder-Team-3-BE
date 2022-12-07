@@ -27,6 +27,7 @@ public class Feedback extends BaseTimeEntity {
     @JoinColumn(name="participant_id")
     private Participant participant;
 
+    @Column(columnDefinition = "TEXT")
     private String contents;
 
     @Builder

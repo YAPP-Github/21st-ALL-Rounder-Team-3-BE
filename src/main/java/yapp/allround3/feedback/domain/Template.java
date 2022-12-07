@@ -4,7 +4,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -19,8 +18,9 @@ public class Template {
 
     private String contents;
 
-    @Builder
-    public Template(String contents){
-        this.contents=contents;
+    public static Template createTemplate(String contents){
+        Template template=new Template();
+        template.contents=contents;
+        return template;
     }
 }

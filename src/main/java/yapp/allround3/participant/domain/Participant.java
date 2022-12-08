@@ -30,4 +30,11 @@ public class Participant {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "member_id")
 	private Member member;
+
+	public static Participant createParticipant(Project project,Member member){
+		Participant participant=new Participant();
+		participant.member=member;
+		participant.project=project;
+		return participant;
+	}
 }

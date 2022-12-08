@@ -13,7 +13,7 @@ import yapp.allround3.project.domain.Project;
 @Data
 @AllArgsConstructor
 public class ProjectResponse {
-
+	private Long id;
 	private String name;
 	private LocalDate startDate;
 	private LocalDate dueDate;
@@ -31,6 +31,7 @@ public class ProjectResponse {
 		 */
 
 		return new ProjectResponse(
+				project.getId(),
 				project.getName(),
 				project.getStartDate(),
 				project.getDueDate(),

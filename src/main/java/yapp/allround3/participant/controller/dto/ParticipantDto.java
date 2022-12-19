@@ -2,16 +2,19 @@ package yapp.allround3.participant.controller.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import yapp.allround3.participant.domain.Participant;
 
 @Data
-@AllArgsConstructor
+@NoArgsConstructor
 public class ParticipantDto {
     private String name;
     private String imageUrl;
 
     public static ParticipantDto of(Participant participant) {
-        return new ParticipantDto(participant.getMember().getName(),
-                participant.getMember().getImageUrl());
+        ParticipantDto participantDto = new ParticipantDto();
+        participantDto.setName(participant.getMember().getName());
+        participantDto.setImageUrl(participant.getMember().getImageUrl());
+        return participantDto;
     }
 }

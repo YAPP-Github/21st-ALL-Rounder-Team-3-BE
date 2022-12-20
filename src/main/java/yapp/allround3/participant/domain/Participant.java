@@ -31,7 +31,7 @@ public class Participant {
 	@JoinColumn(name = "member_id")
 	private Member member;
 
-	public static Participant createParticipant(Project project,Member member){
+	public static Participant from(Project project,Member member){
 		Participant participant=new Participant();
 		participant.member=member;
 		participant.project=project;

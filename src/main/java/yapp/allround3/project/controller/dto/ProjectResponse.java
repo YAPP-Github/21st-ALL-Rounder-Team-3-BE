@@ -1,46 +1,62 @@
 package yapp.allround3.project.controller.dto;
 
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import yapp.allround3.common.security.SecurityUtils;
 import yapp.allround3.participant.controller.dto.ParticipantDto;
 import yapp.allround3.project.domain.Difficulty;
 import yapp.allround3.project.domain.Project;
+import yapp.allround3.project.domain.ProjectStatus;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 @Data
-@AllArgsConstructor
+@NoArgsConstructor
+@JsonPropertyOrder({"id","name","startDate","dueDate","dDay","goal","difficulty","projectStatus","progress","participantInfos"})
 public class ProjectResponse {
-	private Long id;
+	private String id;
 	private String name;
 	private LocalDate startDate;
 	private LocalDate dueDate;
 	private Long dDay;
 	private String goal;
 	private Difficulty difficulty;
+	private ProjectStatus projectStatus;
 	private Long progress;
 	private List<ParticipantDto> participantInfos;
 
-	public static ProjectResponse of(Project project, List<ParticipantDto> participantDtos) {
+	public static ProjectResponse of(Project project, List<ParticipantDto> participantDtos){
 
-		/*
-		TODO - 프로젝트 종료 여부도 status로 만들지 논의해야 할 것 같다. 아니면 Dday, 진행률 계산이 생각처럼 안나올 듯함.
-		EX) Project status=종료 라면 dday=0, 진행정도=100으로 세팅하도록 하는 로직 추가하면 될듯?
-		 */
+		ProjectResponse projectResponse = new ProjectResponse();
+		projectResponse.setId(SecurityUtils.encodeKey(project.getId()));
+		projectResponse.setName(project.getName());
+		projectResponse.setStartDate(project.getStartDate());
+		projectResponse.setDueDate(project.getDueDate());
+		projectResponse.setDDay(calculateDuration(LocalDate.now(),project.getDueDate()));
+		projectResponse.setGoal(project.getGoal());
+		projectResponse.setDifficulty(project.getDifficulty());
+		projectResponse.setProjectStatus(project.getProjectStatus());
+		if(project.getProjectStatus()==ProjectStatus.COMPLETED){
+			projectResponse.setProgress(100L);
+		}
+		else {
+			projectResponse.setProgress(calculateProgress(project.getStartDate(), project.getDueDate()));
+		}
+		projectResponse.setParticipantInfos(participantDtos);
 
-		return new ProjectResponse(
-				project.getId(),
-				project.getName(),
-				project.getStartDate(),
-				project.getDueDate(),
-				calculateDuration(LocalDate.now(),project.getDueDate()),
-				project.getGoal(),
-				project.getDifficulty(),
-				calculateProgress(project.getStartDate(),project.getDueDate()),
-				participantDtos
-		);
+		return projectResponse;
 	}
 
 	public static Long calculateDuration(LocalDate start, LocalDate end){

@@ -29,12 +29,17 @@ public class Project extends BaseTimeEntity {
 
 	@Enumerated(value = EnumType.STRING)
 	private Difficulty difficulty;
+
+	@Enumerated(value = EnumType.STRING)
+	private ProjectStatus projectStatus;
+
 	@Builder
-	private Project(String name, LocalDate startDate, LocalDate dueDate,String goal, Difficulty difficulty) {
+	private Project(String name, LocalDate startDate, LocalDate dueDate,String goal, Difficulty difficulty,ProjectStatus projectStatus) {
 		this.name = name;
 		this.startDate = startDate;
 		this.dueDate = dueDate;
 		this.goal = goal;
 		this.difficulty = difficulty;
+		this.projectStatus= projectStatus;
 	}
 }

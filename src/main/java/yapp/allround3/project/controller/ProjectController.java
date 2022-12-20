@@ -40,7 +40,7 @@ public class ProjectController {
     }
 
     @ResponseBody
-    @GetMapping("")
+    @GetMapping("/{projectId}")
     public CustomResponse<ProjectResponse> findProjectById(@PathVariable String projectId){
         //Project id 암호화 String -> Id 변환이 여기서 일어나는게 맞는지 약간 의문임?
         Project project = projectService.findProjectById(SecurityUtils.decodeKey(projectId));

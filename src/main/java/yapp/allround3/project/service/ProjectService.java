@@ -33,7 +33,7 @@ public class ProjectService {
 		return memberRepository.findMemberById(memberId);
 	}
 
-	public List<Participant> findParticipantsInProject(Project project){
+	public List<Participant> findParticipantsByProject(Project project){
 		return participantRepository.findParticipantsByProject(project);
 	}
 

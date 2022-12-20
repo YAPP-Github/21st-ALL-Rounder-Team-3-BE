@@ -1,6 +1,8 @@
 package yapp.allround3.project.service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,4 +44,9 @@ public class ProjectService {
 			.map(Participant::getProject)
 			.toList();
 	}
+
+    public Project findProjectById(Long projectId) {
+		Optional<Project> project = projectRepository.findById(projectId);
+		return project.orElseThrow(NoSuchElementException::new);
+    }
 }

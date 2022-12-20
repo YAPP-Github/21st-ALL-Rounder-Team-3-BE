@@ -18,7 +18,7 @@ public class Template {
 
     private String contents;
 
-    public static Template createTemplate(String contents){
+    public static Template from(String contents){
         Template template=new Template();
         template.contents=contents;
         return template;

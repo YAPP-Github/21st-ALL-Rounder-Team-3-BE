@@ -29,14 +29,14 @@ public class SecurityUtils {
         }
     }
 
-    public static String decodeKey(String encodedKey){
+    public static Long decodeKey(String encodedKey){
         try {
             AlgorithmParameterSpec ivSpec = new IvParameterSpec(Secret.secretKey.getBytes());
             SecretKeySpec newKey = new SecretKeySpec(Secret.secretKey.getBytes("UTF-8"), "AES");
             byte[] textBytes = Base64.decodeBase64(encodedKey);
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
             cipher.init(Cipher.DECRYPT_MODE, newKey, ivSpec);
-            return new String(cipher.doFinal(textBytes), "UTF-8");
+            return Long.valueOf(new String(cipher.doFinal(textBytes), "UTF-8"));
         }catch (Exception e){
             throw new CustomException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }

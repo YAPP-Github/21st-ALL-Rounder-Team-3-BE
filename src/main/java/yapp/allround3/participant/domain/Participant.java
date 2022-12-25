@@ -10,13 +10,14 @@ import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import yapp.allround3.common.entity.BaseTimeEntity;
 import yapp.allround3.member.domain.Member;
 import yapp.allround3.project.domain.Project;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Participant {
+public class Participant extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue
@@ -31,7 +32,7 @@ public class Participant {
 	@JoinColumn(name = "member_id")
 	private Member member;
 
-	public static Participant from(Project project,Member member){
+	public static Participant of(Project project, Member member) {
 		Participant participant=new Participant();
 		participant.member=member;
 		participant.project=project;

@@ -17,6 +17,7 @@ public class Feedback extends BaseTimeEntity {
 
     @Id
     @GeneratedValue
+    @Column(name = "feedback_id")
     private Long id;
 
     @ManyToOne(fetch= FetchType.LAZY)

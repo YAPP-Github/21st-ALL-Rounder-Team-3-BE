@@ -18,9 +18,6 @@ import yapp.allround3.project.domain.Difficulty;
 import yapp.allround3.project.domain.Project;
 import yapp.allround3.project.domain.ProjectStatus;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 
 @Data
 @NoArgsConstructor
@@ -36,8 +33,9 @@ public class ProjectResponse {
 	private ProjectStatus projectStatus;
 	private Long progress;
 	private List<ParticipantDto> participantInfos;
+	private String myParticipantId;
 
-	public static ProjectResponse of(Project project, List<ParticipantDto> participantDtos){
+	public static ProjectResponse of(Project project, Long myParticipantId, List<ParticipantDto> participantDtos){
 
 		ProjectResponse projectResponse = new ProjectResponse();
 		projectResponse.setId(SecurityUtils.encodeKey(project.getId()));
@@ -48,6 +46,7 @@ public class ProjectResponse {
 		projectResponse.setGoal(project.getGoal());
 		projectResponse.setDifficulty(project.getDifficulty());
 		projectResponse.setProjectStatus(project.getProjectStatus());
+		projectResponse.setMyParticipantId(SecurityUtils.encodeKey(myParticipantId));
 		if(project.getProjectStatus()==ProjectStatus.COMPLETED){
 			projectResponse.setProgress(100L);
 		}

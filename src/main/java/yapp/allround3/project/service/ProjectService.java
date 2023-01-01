@@ -33,9 +33,11 @@ public class ProjectService {
 		return memberRepository.findMemberById(memberId);
 	}
 
-	public List<Participant> findParticipantsByProject(Project project){
-		return participantRepository.findParticipantsByProject(project);
+	public Participant findParticipantById(Long participantId){
+		return participantRepository.findParticipantById(participantId);
 	}
+
+
 
 	public List<Project> findProjectByMember(Member member) {
 		List<Participant> participants = participantRepository.findByMember(member);
@@ -49,4 +51,13 @@ public class ProjectService {
 		Optional<Project> project = projectRepository.findById(projectId);
 		return project.orElseThrow(()->new CustomException("존재하지 않는 프로젝트입니다."));
     }
+
+	//TODO Participant 조회 부분 의존성 정리
+	public Long findMyParticipantId(Member member,Project project){
+		return participantRepository.findParticipantByProjectAndMember(project,member).getId();
+	}
+
+	public int findParticipantCountByProject(Project project){
+		return participantRepository.countParticipantByProject(project);
+	}
 }

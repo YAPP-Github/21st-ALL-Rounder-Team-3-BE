@@ -10,8 +10,19 @@ import yapp.allround3.participant.domain.Participant;
 import yapp.allround3.project.domain.Project;
 
 public interface ParticipantRepository extends JpaRepository<Participant, Long> {
+	@Query("SELECT p from Participant p join fetch p.member where p.id=:id")
+	Participant findParticipantById(Long id);
+
 	List<Participant> findByMember(Member member);
 
 	@Query("select p from Participant p join fetch p.member")
 	List<Participant> findParticipantsByProject(Project project);
+
+	int countParticipantByProject(Project project);
+	Participant findParticipantByProjectAndMember(Project project,Member member);
+
+
+
+
+
 }

@@ -23,7 +23,7 @@ import yapp.allround3.project.domain.ProjectStatus;
 @NoArgsConstructor
 @JsonPropertyOrder({"id","name","startDate","dueDate","dDay","goal","difficulty","projectStatus","progress","participantInfos"})
 public class ProjectResponse {
-	private String id;
+	private Long id;
 	private String name;
 	private LocalDate startDate;
 	private LocalDate dueDate;
@@ -33,12 +33,12 @@ public class ProjectResponse {
 	private ProjectStatus projectStatus;
 	private Long progress;
 	private List<ParticipantDto> participantInfos;
-	private String myParticipantId;
+	private Long myParticipantId;
 
 	public static ProjectResponse of(Project project, Long myParticipantId, List<ParticipantDto> participantDtos){
 
 		ProjectResponse projectResponse = new ProjectResponse();
-		projectResponse.setId(SecurityUtils.encodeKey(project.getId()));
+		projectResponse.setId(project.getId());
 		projectResponse.setName(project.getName());
 		projectResponse.setStartDate(project.getStartDate());
 		projectResponse.setDueDate(project.getDueDate());
@@ -46,7 +46,7 @@ public class ProjectResponse {
 		projectResponse.setGoal(project.getGoal());
 		projectResponse.setDifficulty(project.getDifficulty());
 		projectResponse.setProjectStatus(project.getProjectStatus());
-		projectResponse.setMyParticipantId(SecurityUtils.encodeKey(myParticipantId));
+		projectResponse.setMyParticipantId(myParticipantId);
 		if(project.getProjectStatus()==ProjectStatus.COMPLETED){
 			projectResponse.setProgress(100L);
 		}

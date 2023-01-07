@@ -15,7 +15,7 @@ public class TaskResponse {
     @Data
     @NoArgsConstructor
     public static class TaskInfo{
-        private String id;
+        private Long id;
         private MemberInfo representative;
         private String title;
         private LocalDate startDate;
@@ -29,8 +29,9 @@ public class TaskResponse {
             TaskInfo taskInfo = new TaskInfo();
             MemberInfo representative = MemberInfo.of(participant.getMember());
             //TODO : Encoding 시에 "/"가 포함되어 path로 간주해버리는 문제 발생. 다른 암호화 방법도 찾아볼 것
-            taskInfo.setId(SecurityUtils.encodeKey(task.getId()));
+            taskInfo.setId(task.getId());
             taskInfo.setRepresentative(representative);
+            taskInfo.setMemo(task.getMemo());
             taskInfo.setTitle(task.getTitle());
             taskInfo.setStartDate(task.getStartDate());
             taskInfo.setDueDate(task.getDueDate());

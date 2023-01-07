@@ -31,7 +31,7 @@ public class ProjectController {
 
     @ResponseBody
     @GetMapping("")
-    public CustomResponse<List<ProjectResponse>> findProjectsByMember(@RequestParam Long memberId){
+    public CustomResponse<List<ProjectResponse>> findProjectsByMember(@RequestParam(name = "member-id") Long memberId){
         // TODO : 임시방편으로 memberId받도록 설정했음, 추후에 jwt 로직 추가되면 거기서 꺼내서 쓰도록 할 예정.
         Member member = projectService.findMember(memberId); //member관련 로직이 projectService에 들어가야 하는지..?
         List<Project> projects = projectService.findProjectByMember(member);
@@ -52,11 +52,11 @@ public class ProjectController {
     @ResponseBody
     @GetMapping("/{projectId}")
     public CustomResponse<ProjectResponse> findProjectById(
-            @PathVariable String projectId,
+            @PathVariable Long projectId,
             @RequestParam(name = "member-id") Long memberId){
         //TODO Id 암호화 로직 AOP로 변경
         Member member = projectService.findMember(memberId);
-        Project project = projectService.findProjectById(SecurityUtils.decodeKey(projectId));
+        Project project = projectService.findProjectById(projectId);
         List<ParticipantDto> participantDtos = participantService
                 .findParticipantsByProject(project).stream()
                 .map(ParticipantDto::of)
@@ -71,12 +71,12 @@ public class ProjectController {
     @ResponseBody
     @GetMapping("/{projectId}/tasks")
     public CustomResponse<List<TaskResponse.TaskInfo>> findTasksByProject(
-            @PathVariable String projectId,
-            @RequestParam(name="participant-id") String participantId
+            @PathVariable Long projectId,
+            @RequestParam(name="participant-id") Long participantId
     ){
-        Project project = projectService.findProjectById(SecurityUtils.decodeKey(projectId));
+        Project project = projectService.findProjectById(projectId);
         int participantCount = projectService.findParticipantCountByProject(project);
-        Participant participant = projectService.findParticipantById(SecurityUtils.decodeKey(participantId));
+        Participant participant = projectService.findParticipantById(participantId);
 
         List<Task> tasks = taskService.findTaskByParticipant(participant);
         List<TaskResponse.TaskInfo> taskInfos = tasks.stream()

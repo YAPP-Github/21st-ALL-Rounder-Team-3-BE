@@ -25,9 +25,9 @@ public class TaskController {
 
     @GetMapping("/{taskId}")
     public CustomResponse<TaskResponse.DetailedTaskInfo> findTaskById(
-            @PathVariable String taskId){
+            @PathVariable Long taskId){
 
-        Task task = taskService.findTaskById(SecurityUtils.decodeKey(taskId));
+        Task task = taskService.findTaskById(taskId);
         Participant participant = participantService.findParticipantById(task.getParticipant().getId());
         int participantCount = participantService.findParticipantCountByProject(participant.getProject())-1; //자기 자신 제외
         List <Member> confirmedList = memberService.findMembersGivenFeedback(task);//피드백 줄 때 본인은 줄 수 없도록 막아야 함.

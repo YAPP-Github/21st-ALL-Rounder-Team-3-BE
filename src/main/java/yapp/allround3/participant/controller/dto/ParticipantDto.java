@@ -9,13 +9,13 @@ import yapp.allround3.participant.domain.Participant;
 @Data
 @NoArgsConstructor
 public class ParticipantDto {
-    private String id;
+    private Long id;
     private String name;
     private String imageUrl;
 
     public static ParticipantDto of(Participant participant) {
         ParticipantDto participantDto = new ParticipantDto();
-        participantDto.setId(SecurityUtils.encodeKey(participant.getId()));
+        participantDto.setId(participant.getId());
         participantDto.setName(participant.getMember().getName());
         participantDto.setImageUrl(participant.getMember().getImageUrl());
         return participantDto;

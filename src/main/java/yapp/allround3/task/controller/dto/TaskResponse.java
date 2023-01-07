@@ -2,9 +2,7 @@ package yapp.allround3.task.controller.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import yapp.allround3.common.security.SecurityUtils;
-import yapp.allround3.member.domain.Member;
-import yapp.allround3.participant.domain.Participant;
+가import yapp.allround3.participant.domain.Participant;
 import yapp.allround3.task.domain.Task;
 import yapp.allround3.task.domain.TaskStatus;
 
@@ -27,8 +25,8 @@ public class TaskResponse {
 
         public static TaskInfo of(Task task, Participant participant,int participantCount){
             TaskInfo taskInfo = new TaskInfo();
-            MemberInfo representative = MemberInfo.of(participant.getMember());
-            //TODO : Encoding 시에 "/"가 포함되어 path로 간주해버리는 문제 발생. 다른 암호화 방법도 찾아볼 것
+            MemberInfo representative = MemberInfo.of(participant);
+
             taskInfo.setId(task.getId());
             taskInfo.setRepresentative(representative);
             taskInfo.setMemo(task.getMemo());
@@ -50,7 +48,7 @@ public class TaskResponse {
         private List<MemberInfo> confirmedMemberInfos;
 
         public static DetailedTaskInfo of(Task task, Participant participant, int participantCount,
-                                          List<Member> confirmed){
+                                          List<Participant> confirmed){
             //participantCount - task entity에 포함 시키는 게 나아보임
             DetailedTaskInfo detailedTaskInfo = new DetailedTaskInfo();
             TaskInfo taskInfo = TaskInfo.of(task,participant,participantCount);
@@ -65,13 +63,15 @@ public class TaskResponse {
     @Data
     @NoArgsConstructor
     static class MemberInfo {
+        private Long participantId;
         private String name;
         private String imageUrl;
 
-        public static MemberInfo of(Member member){
+        public static MemberInfo of(Participant participant){
             MemberInfo memberInfo = new MemberInfo();
-            memberInfo.setName(member.getName());
-            memberInfo.setImageUrl(member.getImageUrl());
+            memberInfo.setParticipantId(participant.getId());
+            memberInfo.setName(participant.getMember().getName());
+            memberInfo.setImageUrl(participant.getMember().getImageUrl());
             return memberInfo;
         }
     }

@@ -26,6 +26,7 @@ public class MemberService {
     public Member findMemberById(Long id){
         Optional<Member> member= memberRepository.findById(id);
         return member.orElseThrow(()->new CustomException("존재하지 않는 멤버입니다."));
+    }
 
     @Transactional
     public Member join(Member member) {

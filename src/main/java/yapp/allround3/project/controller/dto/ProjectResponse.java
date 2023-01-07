@@ -43,6 +43,7 @@ public class ProjectResponse {
 		projectResponse.setStartDate(project.getStartDate());
 		projectResponse.setDueDate(project.getDueDate());
 		projectResponse.setDDay(calculateDuration(LocalDate.now(),project.getDueDate()));
+		projectResponse.setProjectStatus(project.getProjectStatus());
 		projectResponse.setGoal(project.getGoal());
 		projectResponse.setDifficulty(project.getDifficulty());
 		projectResponse.setProjectStatus(project.getProjectStatus());

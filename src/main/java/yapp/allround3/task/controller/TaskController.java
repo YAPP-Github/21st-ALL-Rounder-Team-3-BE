@@ -30,7 +30,7 @@ public class TaskController {
         Task task = taskService.findTaskById(taskId);
         Participant participant = participantService.findParticipantById(task.getParticipant().getId());
         int participantCount = participantService.findParticipantCountByProject(participant.getProject())-1; //자기 자신 제외
-        List <Member> confirmedList = memberService.findMembersGivenFeedback(task);//피드백 줄 때 본인은 줄 수 없도록 막아야 함.
+        List <Participant> confirmedList = participantService.findParticipantsGivenFeedback(task);//피드백 줄 때 본인은 줄 수 없도록 막아야 함.
 
 
         TaskResponse.DetailedTaskInfo  detailedTaskInfo = TaskResponse.DetailedTaskInfo.of(task,participant,participantCount,confirmedList);

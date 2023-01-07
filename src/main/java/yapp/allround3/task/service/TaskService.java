@@ -5,11 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import yapp.allround3.common.exception.CustomException;
 import yapp.allround3.participant.domain.Participant;
-import yapp.allround3.participant.repository.ParticipantRepository;
 import yapp.allround3.task.domain.Task;
 import yapp.allround3.task.repository.TaskRepository;
 import java.util.List;
-
 
 @Service
 @RequiredArgsConstructor
@@ -17,7 +15,6 @@ import java.util.List;
 public class TaskService {
 
     private final TaskRepository taskRepository;
-    private final ParticipantRepository participantRepository;
 
 
     public List<Task> findTaskByParticipant(Participant participant){

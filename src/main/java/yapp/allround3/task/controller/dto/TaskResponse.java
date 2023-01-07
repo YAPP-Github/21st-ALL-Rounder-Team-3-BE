@@ -2,7 +2,7 @@ package yapp.allround3.task.controller.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-가import yapp.allround3.participant.domain.Participant;
+import yapp.allround3.participant.domain.Participant;
 import yapp.allround3.task.domain.Task;
 import yapp.allround3.task.domain.TaskStatus;
 

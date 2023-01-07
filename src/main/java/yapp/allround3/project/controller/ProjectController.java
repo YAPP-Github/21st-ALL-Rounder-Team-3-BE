@@ -1,11 +1,13 @@
 package yapp.allround3.project.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.*;
 
 import lombok.RequiredArgsConstructor;
 import yapp.allround3.common.dto.CustomResponse;
 import yapp.allround3.common.security.SecurityUtils;
 import yapp.allround3.member.domain.Member;
+import yapp.allround3.member.service.MemberService;
 import yapp.allround3.participant.controller.dto.ParticipantDto;
 import yapp.allround3.participant.domain.Participant;
 import yapp.allround3.participant.service.ParticipantService;
@@ -23,6 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProjectController {
 
+    private final MemberService memberService;
     private final ProjectService projectService;
     private final TaskService taskService;
 
@@ -31,9 +34,12 @@ public class ProjectController {
 
     @ResponseBody
     @GetMapping("")
-    public CustomResponse<List<ProjectResponse>> findProjectsByMember(@RequestParam(name = "member-id") Long memberId){
-        // TODO : 임시방편으로 memberId받도록 설정했음, 추후에 jwt 로직 추가되면 거기서 꺼내서 쓰도록 할 예정.
-        Member member = projectService.findMember(memberId); //member관련 로직이 projectService에 들어가야 하는지..?
+    public CustomResponse<List<ProjectResponse>> findProjectsByMember(
+            HttpServletRequest request
+    ){
+
+        Long memberId = (Long)request.getAttribute("memberId");
+        Member member = memberService.findMemberById(memberId);
         List<Project> projects = projectService.findProjectByMember(member);
         List<ProjectResponse> responses = projects.stream()
                 .map(project -> {
@@ -76,14 +82,27 @@ public class ProjectController {
     ){
         Project project = projectService.findProjectById(projectId);
         int participantCount = projectService.findParticipantCountByProject(project);
-        Participant participant = projectService.findParticipantById(participantId);
+        Participant representative = projectService.findParticipantById(participantId);
 
-        List<Task> tasks = taskService.findTaskByParticipant(participant);
+        List<Task> tasks = taskService.findTaskByParticipant(representative);
         List<TaskResponse.TaskInfo> taskInfos = tasks.stream()
                 .map(task ->
-                        TaskResponse.TaskInfo.of(task,participant,participantCount))
+                        TaskResponse.TaskInfo.of(task,representative,participantCount))
                 .toList();
         return CustomResponse.success(taskInfos);
+    }
+
+    @ResponseBody
+    @GetMapping("/{projectId}/participants")
+    public CustomResponse<List<ParticipantDto>> findParticipantsByProject(
+            @PathVariable Long projectId){
+        Project project = projectService.findProjectById(projectId);
+        List<ParticipantDto> participantDtos = participantService
+                .findParticipantsByProject(project).stream()
+                .map(ParticipantDto::of)
+                .toList();
+
+        return CustomResponse.success(participantDtos);
     }
 
 

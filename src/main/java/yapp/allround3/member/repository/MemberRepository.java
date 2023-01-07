@@ -1,7 +1,12 @@
 package yapp.allround3.member.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import yapp.allround3.auth.oauth.Provider;
 import yapp.allround3.member.domain.Member;
+
 public interface MemberRepository extends JpaRepository<Member, Long> {
-    public Member findMemberById(Long id);
+    Optional<Member> findByProviderAndOauthId(Provider provider, String oauthId);
 }

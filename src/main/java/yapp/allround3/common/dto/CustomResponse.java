@@ -34,7 +34,7 @@ public class CustomResponse<T> {
 		CustomResponse<?> customResponse = new CustomResponse<>();
 
 		customResponse.status = false;
-		customResponse.message = e.getClass().getSimpleName() + ": " + e.getMessage();
+		customResponse.message = e.getMessage();
 
 		return customResponse;
 	}

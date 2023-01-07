@@ -32,10 +32,14 @@ public class Participant extends BaseTimeEntity {
 	@JoinColumn(name = "member_id")
 	private Member member;
 
-	public static Participant of(Project project, Member member) {
+	@Column(name="leader", columnDefinition = "TINYINT",length =1)
+	private int leader;
+
+	public static Participant from(Project project,Member member,int leader){
 		Participant participant=new Participant();
 		participant.member=member;
 		participant.project=project;
+		participant.leader=leader;
 		return participant;
 	}
 }

@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Formula;
 import yapp.allround3.common.entity.BaseTimeEntity;
 
 @Entity
@@ -33,13 +34,18 @@ public class Project extends BaseTimeEntity {
 	@Enumerated(value = EnumType.STRING)
 	private ProjectStatus projectStatus;
 
+	@Formula("(SELECT count(*) FROM participant p where p.participant_id=project_id)")
+	private int participantCount;
+
 	@Builder
-	private Project(String name, LocalDate startDate, LocalDate dueDate,String goal, Difficulty difficulty,ProjectStatus projectStatus) {
+	private Project(String name, LocalDate startDate, LocalDate dueDate,String goal, Difficulty difficulty,ProjectStatus projectStatus,
+					int participantCount) {
 		this.name = name;
 		this.startDate = startDate;
 		this.dueDate = dueDate;
 		this.goal = goal;
 		this.difficulty = difficulty;
 		this.projectStatus= projectStatus;
+		this.participantCount = participantCount;
 	}
 }

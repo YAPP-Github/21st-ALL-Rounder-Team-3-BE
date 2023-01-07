@@ -10,13 +10,14 @@ import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import yapp.allround3.common.entity.BaseTimeEntity;
 import yapp.allround3.member.domain.Member;
 import yapp.allround3.project.domain.Project;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Participant {
+public class Participant extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue

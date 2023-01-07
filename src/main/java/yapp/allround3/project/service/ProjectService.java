@@ -30,7 +30,8 @@ public class ProjectService {
 	}
 
 	public Member findMember(Long memberId){
-		return memberRepository.findMemberById(memberId);
+		return memberRepository.findById(memberId)
+			.orElseThrow();
 	}
 
 	public Participant findParticipantById(Long participantId){

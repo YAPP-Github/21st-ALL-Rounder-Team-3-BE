@@ -5,13 +5,16 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import yapp.allround3.common.entity.BaseTimeEntity;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class FeedbackTemplate {
+public class FeedbackTemplate extends BaseTimeEntity {
+
     @Id
     @GeneratedValue
+    @Column(name = "feedback_template_id")
     private Long id;
 
     @ManyToOne(fetch= FetchType.LAZY)

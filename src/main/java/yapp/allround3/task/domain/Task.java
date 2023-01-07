@@ -18,6 +18,7 @@ public class Task extends BaseTimeEntity {
 
     @Id
     @GeneratedValue
+    @Column(name = "task_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

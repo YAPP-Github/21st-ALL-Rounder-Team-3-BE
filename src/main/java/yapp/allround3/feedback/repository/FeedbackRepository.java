@@ -10,6 +10,5 @@ import java.util.List;
 
 @Repository
 public interface FeedbackRepository extends JpaRepository<Feedback,Long> {
-
-
+	List<Feedback> findByTask(Task task);
 }

@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import yapp.allround3.common.entity.BaseTimeEntity;
+import yapp.allround3.task.domain.Task;
 
 @Entity
 @Getter
@@ -18,16 +19,22 @@ public class FeedbackTemplate extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne(fetch= FetchType.LAZY)
-    @JoinColumn(name="feedback_id")
-    private Feedback feedback;
+    @JoinColumn(name="task_id")
+    private Task task;
 
-    @ManyToOne(fetch= FetchType.LAZY)
-    @JoinColumn(name="template_id")
-    private Template template;
+    @Column(unique = true)
+    private int templateId;
 
-    @Builder
-    public FeedbackTemplate(Feedback feedback,Template template){
-        this.feedback=feedback;
-        this.template=template;
+    private int count;
+
+    public static FeedbackTemplate from(Task task) {
+        FeedbackTemplate feedbackTemplate = new FeedbackTemplate();
+        feedbackTemplate.task = task;
+
+        return feedbackTemplate;
+    }
+
+    public void addCount() {
+        count++;
     }
 }

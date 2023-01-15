@@ -12,7 +12,7 @@ public class ParticipantDto {
     private Long id;
     private String name;
     private String imageUrl;
-    private int leader;
+    private boolean leader;
 
     public static ParticipantDto of(Participant participant) {
         ParticipantDto participantDto = new ParticipantDto();

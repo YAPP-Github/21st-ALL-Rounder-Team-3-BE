@@ -6,11 +6,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import yapp.allround3.common.dto.CustomResponse;
+import yapp.allround3.participant.controller.dto.ParticipantFeedbackResponse;
 import yapp.allround3.participant.controller.dto.ParticipantResponse;
 import yapp.allround3.participant.domain.Participant;
 import yapp.allround3.participant.service.ParticipantService;
@@ -48,5 +50,14 @@ public class ParticipantController {
 	) {
 		Long memberId = (Long)request.getAttribute("memberId");
 		participantService.changeLeader(memberId, participantsId);
+	}
+
+	@GetMapping("participants")
+	public CustomResponse<ParticipantFeedbackResponse> findParticipantGroupByTask(
+		@RequestParam Long taskId
+	) {
+		ParticipantFeedbackResponse result = participantService.findParticipantGroupByTask(taskId);
+
+		return CustomResponse.success(result);
 	}
 }

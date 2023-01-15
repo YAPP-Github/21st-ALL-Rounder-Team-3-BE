@@ -1,6 +1,7 @@
 package yapp.allround3.participant.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -12,7 +13,7 @@ import yapp.allround3.task.domain.Task;
 
 public interface ParticipantRepository extends JpaRepository<Participant, Long> {
 	@Query("SELECT p from Participant p join fetch p.member where p.id=:id")
-	Participant findParticipantById(Long id);
+	Optional<Participant> findParticipantById(Long id);
 
 	List<Participant> findByMember(Member member);
 
@@ -20,11 +21,8 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
 	List<Participant> findParticipantsByProject(Project project);
 
 	int countParticipantByProject(Project project);
-	Participant findParticipantByProjectAndMember(Project project,Member member);
+	Optional<Participant> findParticipantByProjectAndMember(Project project,Member member);
 
 	@Query("select f.participant as p from Feedback f where f.task=:task")
 	List<Participant> findParticipantsGivenFeedback(Task task);
-
-
-
 }

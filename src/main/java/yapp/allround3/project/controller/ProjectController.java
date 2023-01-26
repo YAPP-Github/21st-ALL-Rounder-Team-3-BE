@@ -33,7 +33,7 @@ public class ProjectController {
 
 
     @ResponseBody
-    @GetMapping("")
+    @GetMapping("/projects")
     public CustomResponse<List<ProjectResponse>> findProjectsByMember(
             HttpServletRequest request
     ){
@@ -56,7 +56,7 @@ public class ProjectController {
     }
 
     @ResponseBody
-    @GetMapping("/{projectId}")
+    @GetMapping("/projects/{projectId}")
     public CustomResponse<ProjectResponse> findProjectById(
             @PathVariable Long projectId,
             @RequestParam(name = "member-id") Long memberId){
@@ -73,37 +73,8 @@ public class ProjectController {
         return CustomResponse.success(response);
     }
 
-    // "/tasks" api가 여기에 위치하는게 맞을지 생각해봐야 할 것 같음. 여기서 task패키지의 dto, service등에 의존하게 됨 (설계 공부 필요,,)
-    @ResponseBody
-    @GetMapping("/{projectId}/tasks")
-    public CustomResponse<List<TaskResponse.TaskInfo>> findTasksByProject(
-            @PathVariable Long projectId,
-            @RequestParam(name="participant-id") Long participantId
-    ){
-        Project project = projectService.findProjectById(projectId);
-        int participantCount = projectService.findParticipantCountByProject(project);
-        Participant representative = projectService.findParticipantById(participantId);
 
-        List<Task> tasks = taskService.findTaskByParticipant(representative);
-        List<TaskResponse.TaskInfo> taskInfos = tasks.stream()
-                .map(task ->
-                        TaskResponse.TaskInfo.of(task,representative,participantCount))
-                .toList();
-        return CustomResponse.success(taskInfos);
-    }
 
-    @ResponseBody
-    @GetMapping("/{projectId}/participants")
-    public CustomResponse<List<ParticipantDto>> findParticipantsByProject(
-            @PathVariable Long projectId){
-        Project project = projectService.findProjectById(projectId);
-        List<ParticipantDto> participantDtos = participantService
-                .findParticipantsByProject(project).stream()
-                .map(ParticipantDto::of)
-                .toList();
-
-        return CustomResponse.success(participantDtos);
-    }
 
 
 }

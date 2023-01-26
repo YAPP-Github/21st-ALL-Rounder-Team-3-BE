@@ -10,6 +10,7 @@ import yapp.allround3.common.entity.BaseTimeEntity;
 import yapp.allround3.participant.domain.Participant;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Getter
@@ -37,7 +38,7 @@ public class Task extends BaseTimeEntity {
     @Enumerated(value = EnumType.STRING)
     private TaskStatus status;
 
-    @Formula("(SELECT count(*) FROM feedback f WHERE f.task_id= id)")
+    @Formula("(SELECT count(*) FROM feedback f WHERE f.task_id= task_id)")
     private int confirmCount;
 
     @Builder

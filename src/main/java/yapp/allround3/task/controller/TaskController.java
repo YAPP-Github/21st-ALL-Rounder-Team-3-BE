@@ -3,38 +3,57 @@ package yapp.allround3.task.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import yapp.allround3.common.dto.CustomResponse;
-import yapp.allround3.common.security.SecurityUtils;
-import yapp.allround3.member.domain.Member;
+import yapp.allround3.common.interceptor.NoAuth;
 import yapp.allround3.member.service.MemberService;
 import yapp.allround3.participant.domain.Participant;
 import yapp.allround3.participant.service.ParticipantService;
+import yapp.allround3.project.domain.Project;
+import yapp.allround3.project.service.ProjectService;
 import yapp.allround3.task.controller.dto.TaskResponse;
 import yapp.allround3.task.domain.Task;
+import yapp.allround3.task.domain.TaskContent;
 import yapp.allround3.task.service.TaskService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/tasks")
 @RequiredArgsConstructor
 public class TaskController {
 
-    private final MemberService memberService;
+    private final ProjectService projectService;
     private final TaskService taskService;
     private final ParticipantService participantService;
 
-    @GetMapping("/{taskId}")
-    public CustomResponse<TaskResponse.DetailedTaskInfo> findTaskById(
+    @NoAuth
+    @GetMapping("/tasks/{taskId}")
+    public CustomResponse<TaskResponse.TaskInfo> findTaskById(
             @PathVariable Long taskId){
 
         Task task = taskService.findTaskById(taskId);
         Participant participant = participantService.findParticipantById(task.getParticipant().getId());
         int participantCount = participantService.findParticipantCountByProject(participant.getProject())-1; //자기 자신 제외
-        List <Participant> confirmedList = participantService.findParticipantsGivenFeedback(task);//피드백 줄 때 본인은 줄 수 없도록 막아야 함.
+        List<TaskContent> taskContents = taskService.findTaskContentsByTask(task);
+        TaskResponse.TaskInfo taskInfo = TaskResponse.TaskInfo.of(task,participant,participantCount,taskContents);
+        return CustomResponse.success(taskInfo);
+    }
 
+    @NoAuth
+    @ResponseBody
+    @GetMapping("/projects/{projectId}/tasks")
+    public CustomResponse<List<TaskResponse.TaskInfo>> findTasksByProject(
+            @PathVariable Long projectId,
+            @RequestParam(name="participant-id") Long participantId
+    ){
+        Project project = projectService.findProjectById(projectId);
+        int participantCount = projectService.findParticipantCountByProject(project);
+        Participant representative = projectService.findParticipantById(participantId);
 
-        TaskResponse.DetailedTaskInfo  detailedTaskInfo = TaskResponse.DetailedTaskInfo.of(task,participant,participantCount,confirmedList);
-        return CustomResponse.success(detailedTaskInfo);
+        List<Task> tasks = taskService.findTaskByParticipant(representative);
+        List<TaskResponse.TaskInfo> taskInfos = tasks.stream()
+                .map(task ->
+                        TaskResponse.TaskInfo.of(task,representative,participantCount,taskService.findTaskContentsByTask(task)))
+                .toList();
+        return CustomResponse.success(taskInfos);
     }
 
 }

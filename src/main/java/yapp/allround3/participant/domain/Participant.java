@@ -11,6 +11,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import yapp.allround3.common.entity.BaseTimeEntity;
+import yapp.allround3.common.exception.CustomException;
 import yapp.allround3.member.domain.Member;
 import yapp.allround3.project.domain.Project;
 
@@ -32,14 +33,21 @@ public class Participant extends BaseTimeEntity {
 	@JoinColumn(name = "member_id")
 	private Member member;
 
-	@Column(name="leader", columnDefinition = "TINYINT",length =1)
-	private int leader;
+	private Boolean leader;
 
-	public static Participant from(Project project,Member member,int leader){
+	public static Participant from(Project project,Member member){
 		Participant participant=new Participant();
 		participant.member=member;
 		participant.project=project;
-		participant.leader=leader;
 		return participant;
+	}
+
+	public void changeLeader(Participant former) {
+		if (!leader) {
+			throw  new CustomException("Only the team leader can change leader.");
+		}
+
+		former.leader = true;
+		this.leader = false;
 	}
 }

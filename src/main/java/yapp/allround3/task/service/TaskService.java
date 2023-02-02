@@ -19,6 +19,14 @@ public class TaskService {
     private final TaskRepository taskRepository;
     private final TaskContentRepository taskContentRepository;
 
+    public void saveTask(Task task){
+        taskRepository.save(task);
+    }
+
+    public void saveTaskContents(List<TaskContent> taskContents){
+        taskContentRepository.saveAll(taskContents);
+    }
+
     public List<Task> findTaskByParticipant(Participant participant){
         return taskRepository.findTasksByParticipant(participant);
     }

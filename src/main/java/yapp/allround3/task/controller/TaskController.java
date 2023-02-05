@@ -87,7 +87,7 @@ public class TaskController {
     ) {
         Project project = projectService.findProjectById(projectId);
         int participantCount = projectService.findParticipantCountByProject(project);
-        Participant representative = projectService.findParticipantById(participantId);
+        Participant representative = participantService.findParticipantById(participantId);
 
         List<Task> tasks = taskService.findTaskByParticipant(representative);
         List<TaskResponse.TaskInfo> taskInfos = tasks.stream()

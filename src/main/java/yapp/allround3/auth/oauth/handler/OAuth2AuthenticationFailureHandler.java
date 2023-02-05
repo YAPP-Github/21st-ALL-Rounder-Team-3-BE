@@ -24,6 +24,6 @@ public class OAuth2AuthenticationFailureHandler implements AuthenticationFailure
 	) throws IOException {
 		log.warn("login failure!");
 
-		httpServletResponse.sendRedirect("/auth/callback");
+		httpServletResponse.sendRedirect("/auth/callback?appToken=");
 	}
 }

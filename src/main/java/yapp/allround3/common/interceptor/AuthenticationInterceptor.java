@@ -1,15 +1,13 @@
 package yapp.allround3.common.interceptor;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Objects;
 
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,7 +31,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 	public boolean preHandle(
 		HttpServletRequest request, HttpServletResponse response, Object handler
 	) throws IOException {
-		if (HttpMethod.OPTIONS.matches(request.getMethod())) {
+		if (isPreflightRequest(request)) {
 			return true;
 		}
 
@@ -68,6 +66,26 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 			return false;
 		}
 		return false;
+	}
+
+	private boolean isPreflightRequest(HttpServletRequest request) {
+		return isOptions(request) && hasHeaders(request) && hasMethod(request) && hasOrigin(request);
+	}
+
+	private boolean isOptions(HttpServletRequest request) {
+		return request.getMethod().equalsIgnoreCase(HttpMethod.OPTIONS.toString());
+	}
+
+	private boolean hasHeaders(HttpServletRequest request) {
+		return Objects.nonNull(request.getHeader("Access-Control-Request-Headers"));
+	}
+
+	private boolean hasMethod(HttpServletRequest request) {
+		return Objects.nonNull(request.getHeader("Access-Control-Request-Method"));
+	}
+
+	private boolean hasOrigin(HttpServletRequest request) {
+		return Objects.nonNull(request.getHeader("Origin"));
 	}
 }
 

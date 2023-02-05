@@ -28,4 +28,12 @@ public class TaskContent {
         this.url = url;
         this.task = task;
     }
+
+    public void updateTitle(String title){
+        this.title=title;
+    }
+
+    public void updateUrl(String url){
+        this.url = url;
+    }
 }

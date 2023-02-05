@@ -1,6 +1,7 @@
 package yapp.allround3.task.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import yapp.allround3.common.dto.CustomResponse;
 import yapp.allround3.common.interceptor.NoAuth;
@@ -8,13 +9,15 @@ import yapp.allround3.participant.domain.Participant;
 import yapp.allround3.participant.service.ParticipantService;
 import yapp.allround3.project.domain.Project;
 import yapp.allround3.project.service.ProjectService;
-import yapp.allround3.task.controller.dto.TaskRequest;
+import yapp.allround3.task.controller.dto.TaskCreateRequest;
 import yapp.allround3.task.controller.dto.TaskResponse;
+import yapp.allround3.task.controller.dto.TaskUpdateRequest;
 import yapp.allround3.task.domain.Task;
 import yapp.allround3.task.domain.TaskContent;
 import yapp.allround3.task.service.TaskService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,7 +27,7 @@ public class TaskController {
     private final TaskService taskService;
     private final ParticipantService participantService;
 
-    @NoAuth
+
     @GetMapping("/tasks/{taskId}")
     public CustomResponse<TaskResponse.TaskInfo> findTaskById(
             @PathVariable Long taskId) {
@@ -37,21 +40,23 @@ public class TaskController {
         return CustomResponse.success(taskInfo);
     }
 
-    @PostMapping("/tasks")
-    public CustomResponse<String> createTask(TaskRequest taskRequest) {
-        Participant participant = participantService.findParticipantById(taskRequest.getParticipantId());
+    @PostMapping("/projects/{projectId}/tasks")
+    public CustomResponse<String> createTask(@PathVariable Long projectId,
+            @RequestBody TaskCreateRequest taskCreateRequest) {
+        Participant participant = participantService.findParticipantById(taskCreateRequest.getParticipantId());
         Task task = (Task.builder().
-                title(taskRequest.getTitle())
-                .dueDate(taskRequest.getDueDate())
-                .startDate(taskRequest.getStartDate())
-                .memo(taskRequest.getMemo())
-                .status(taskRequest.getTaskStatus()))
+                title(taskCreateRequest.getTitle())
+                .dueDate(taskCreateRequest.getDueDate())
+                .startDate(taskCreateRequest.getStartDate())
+                .memo(taskCreateRequest.getMemo())
+                .status(taskCreateRequest.getTaskStatus()))
                 .participant(participant)
                 .build();
 
+
         taskService.saveTask(task);
 
-        List<TaskContent> taskContents = taskRequest.getTaskContents()
+        List<TaskContent> taskContents = taskCreateRequest.getTaskContents()
                 .stream().map(taskContentRequest -> TaskContent.builder()
                         .url(taskContentRequest.getUrl())
                         .task(task)
@@ -60,7 +65,17 @@ public class TaskController {
 
         taskService.saveTaskContents(taskContents);
 
-        return CustomResponse.success("success");
+        return CustomResponse.success("create task success");
+    }
+
+    @PutMapping("/tasks/{taskId}")
+    public CustomResponse<String> updateTask(@RequestBody TaskUpdateRequest taskUpdateRequest,
+                                             @PathVariable Long taskId) {
+
+        taskService.updateTask(taskUpdateRequest);
+        taskUpdateRequest.getTaskContents().forEach(taskService::updateTaskContent);
+
+        return CustomResponse.success("update task success");
     }
 
     @NoAuth
@@ -81,7 +96,6 @@ public class TaskController {
                 .toList();
         return CustomResponse.success(taskInfos);
     }
-
 
 
 }

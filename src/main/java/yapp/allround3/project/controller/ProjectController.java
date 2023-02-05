@@ -5,30 +5,23 @@ import org.springframework.web.bind.annotation.*;
 
 import lombok.RequiredArgsConstructor;
 import yapp.allround3.common.dto.CustomResponse;
-import yapp.allround3.common.security.SecurityUtils;
 import yapp.allround3.member.domain.Member;
 import yapp.allround3.member.service.MemberService;
 import yapp.allround3.participant.controller.dto.ParticipantDto;
-import yapp.allround3.participant.domain.Participant;
 import yapp.allround3.participant.service.ParticipantService;
 import yapp.allround3.project.controller.dto.ProjectResponse;
 import yapp.allround3.project.domain.Project;
 import yapp.allround3.project.service.ProjectService;
-import yapp.allround3.task.controller.dto.TaskResponse;
-import yapp.allround3.task.domain.Task;
 import yapp.allround3.task.service.TaskService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/projects")
 @RequiredArgsConstructor
 public class ProjectController {
 
     private final MemberService memberService;
     private final ProjectService projectService;
-    private final TaskService taskService;
-
     private final ParticipantService participantService;
 
 

@@ -16,15 +16,14 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class OAuth2AuthenticationFailureHandler implements AuthenticationFailureHandler {
 
-	private final RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
-
 	@Override
 	public void onAuthenticationFailure(
 		HttpServletRequest httpServletRequest,
 		HttpServletResponse httpServletResponse,
 		AuthenticationException e
 	) throws IOException {
-		log.info("login failure!");
-		redirectStrategy.sendRedirect(httpServletRequest,httpServletResponse,"/login");
+		log.warn("login failure!");
+
+		httpServletResponse.sendRedirect("/auth/callback");
 	}
 }

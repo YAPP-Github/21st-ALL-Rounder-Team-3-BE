@@ -43,6 +43,7 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
 
 			Cookie refreshTokenCookie = jwtService.getCookieFromRefreshToken(authTokenResponse.getRefreshToken());
 			httpServletResponse.addCookie(refreshTokenCookie);
+
 			httpServletResponse.sendRedirect("/auth/callback?appToken=" + authTokenResponse.getAppToken());
 		}
 	}

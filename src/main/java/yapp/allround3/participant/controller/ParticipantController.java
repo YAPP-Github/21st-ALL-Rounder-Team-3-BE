@@ -24,7 +24,7 @@ public class ParticipantController {
 
 	private final ParticipantService participantService;
 
-	@PostMapping("projects/{projectId}")
+	@PostMapping("/projects/{projectId}")
 	public void joinProjects(
 		@PathVariable Long projectId,
 		HttpServletRequest request
@@ -33,7 +33,7 @@ public class ParticipantController {
 		participantService.joinProject(projectId, memberId);
 	}
 
-	@GetMapping("projects/{projectId}/participants")
+	@GetMapping("/projects/{projectId}/participants")
 	public CustomResponse<List<ParticipantResponse>> findAllParticipants(
 		@PathVariable Long projectId
 	) {
@@ -45,7 +45,7 @@ public class ParticipantController {
 		return CustomResponse.success(result);
 	}
 
-	@PutMapping("participants/{participantsId}")
+	@PutMapping("/participants/{participantsId}")
 	public void changeLeader(
 		@PathVariable Long participantsId,
 		HttpServletRequest request
@@ -54,7 +54,7 @@ public class ParticipantController {
 		participantService.changeLeader(memberId, participantsId);
 	}
 
-	@GetMapping("participants")
+	@GetMapping("/participants")
 	public CustomResponse<ParticipantFeedbackResponse> findParticipantGroupByTask(
 		@RequestParam Long taskId
 	) {

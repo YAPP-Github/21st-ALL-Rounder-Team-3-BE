@@ -2,6 +2,7 @@ package yapp.allround3.auth.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -18,6 +19,7 @@ import yapp.allround3.common.interceptor.NoAuth;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("auth")
+@CrossOrigin(origins = "*")
 @NoAuth
 @Slf4j
 public class AuthController {

@@ -1,9 +1,6 @@
 package yapp.allround3.member.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +11,7 @@ import yapp.allround3.member.service.MemberService;
 
 @RestController
 @RequestMapping("/members")
+@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 public class MemberController {
 	private final MemberService memberService;

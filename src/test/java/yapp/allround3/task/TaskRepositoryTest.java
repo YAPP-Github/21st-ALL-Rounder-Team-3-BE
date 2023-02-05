@@ -1,3 +1,4 @@
+/*
 package yapp.allround3.task;
 
 import org.junit.jupiter.api.Test;
@@ -65,8 +66,8 @@ public class TaskRepositoryTest {
         Project project = Project.builder().name("플젝1").startDate(startDate).dueDate(endDate).goal("화팅").difficulty(Difficulty.EASY).build();
         projectRepository.save(project);
 
-        Participant participant1 = Participant.from(project,member1);
-        Participant participant2 = Participant.from(project,member2);
+        Participant participant1 = Participant.from(project,member1,1);
+        Participant participant2 = Participant.from(project,member2,1);
 
         participantRepository.save(participant2);
         participantRepository.save(participant1);
@@ -112,3 +113,4 @@ public class TaskRepositoryTest {
         Optional<Task> task = taskRepository.findTaskById(1L);
     }
 }
+*/

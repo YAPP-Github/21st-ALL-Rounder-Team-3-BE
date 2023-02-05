@@ -19,6 +19,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
+@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 public class ProjectController {
 

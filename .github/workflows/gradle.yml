@@ -7,7 +7,7 @@ on:
 env:
   APPLICATION: ${{ secrets.APPLICATION }}
   RESOURCE_PATH: ./src/main/resources/application.yml
-  S3_BUCKET_NAME: job-scanner-bucket
+  S3_BUCKET_NAME: timitimi-code-deploy
 
 permissions:
   contents: read

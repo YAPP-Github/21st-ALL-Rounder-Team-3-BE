@@ -3,6 +3,7 @@ package yapp.allround3.auth.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -35,5 +36,15 @@ public class AuthController {
 		AuthRefreshResponse authRefreshResponse = jwtService.refreshToken(appToken, refreshToken);
 
 		return CustomResponse.success(authRefreshResponse);
+	}
+
+	@GetMapping("valid")
+	@ResponseStatus(HttpStatus.OK)
+	public CustomResponse<String> checkValid(
+		HttpServletRequest request
+	) {
+		Long memberId = (Long)request.getAttribute("memberId");
+
+		return CustomResponse.success("valid");
 	}
 }

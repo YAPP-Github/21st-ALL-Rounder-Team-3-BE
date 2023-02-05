@@ -102,7 +102,7 @@ public class TaskRepositoryTest {
 
         Optional<Project> project = projectRepository.findById(2L);
         Optional<Member> member = memberRepository.findById(52L);
-        Participant participant = participantRepository.findParticipantByProjectAndMember(
+        Optional<Participant> participant = participantRepository.findParticipantByProjectAndMember(
                 project.orElseThrow(NoSuchElementException::new),
                 member.orElseThrow(NoSuchElementException::new));
     }

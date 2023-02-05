@@ -37,14 +37,4 @@ public class AuthController {
 
 		return CustomResponse.success(authRefreshResponse);
 	}
-
-	@GetMapping("valid")
-	@ResponseStatus(HttpStatus.OK)
-	public CustomResponse<String> checkValid(
-		HttpServletRequest request
-	) {
-		Long memberId = (Long)request.getAttribute("memberId");
-
-		return CustomResponse.success("valid");
-	}
 }

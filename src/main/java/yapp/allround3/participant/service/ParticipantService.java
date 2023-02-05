@@ -69,6 +69,10 @@ public class ParticipantService {
 
 		Participant participant = Participant.from(project, member);
 
+		if (isExistedParticipant(participant)) {
+			throw new CustomException("이미 가입되어 있는 멤버에요.");
+		}
+
 		return participantRepository.save(participant);
 	}
 
@@ -112,5 +116,13 @@ public class ParticipantService {
 		unConfirmedParticipants.remove(participant);
 
 		return ParticipantFeedbackResponse.of(confirmedParticipants, unConfirmedParticipants);
+	}
+
+	private boolean isExistedParticipant(Participant participant) {
+		Member member = participant.getMember();
+		Project project = participant.getProject();
+
+		return participantRepository.findByMemberAndProject(member, project)
+			.isPresent();
 	}
 }

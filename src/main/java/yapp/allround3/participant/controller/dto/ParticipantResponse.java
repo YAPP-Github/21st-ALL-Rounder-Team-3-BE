@@ -20,7 +20,7 @@ public class ParticipantResponse {
 		participantResponse.id = participant.getId();
 		participantResponse.name = member.getName();
 		participantResponse.imageUrl = member.getImageUrl();
-		participantResponse.leader = participant.getLeader();
+		participantResponse.leader = participant.isLeader();
 
 		return participantResponse;
 	}

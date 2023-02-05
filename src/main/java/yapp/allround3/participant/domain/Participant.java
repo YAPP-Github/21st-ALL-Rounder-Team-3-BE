@@ -20,34 +20,34 @@ import yapp.allround3.project.domain.Project;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Participant extends BaseTimeEntity {
 
-	@Id
-	@GeneratedValue
-	@Column(name = "participant_id")
-	private Long id;
+    @Id
+    @GeneratedValue
+    @Column(name = "participant_id")
+    private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "project_id")
-	private Project project;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "project_id")
+    private Project project;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "member_id")
-	private Member member;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
 
-	private Boolean leader;
+    private boolean leader;
 
-	public static Participant from(Project project,Member member){
-		Participant participant=new Participant();
-		participant.member=member;
-		participant.project=project;
-		return participant;
-	}
+    public static Participant from(Project project, Member member) {
+        Participant participant = new Participant();
+        participant.member = member;
+        participant.project = project;
+        return participant;
+    }
 
-	public void changeLeader(Participant former) {
-		if (!leader) {
-			throw  new CustomException("Only the team leader can change leader.");
-		}
+    public void changeLeader(Participant former) {
+        if (!leader) {
+            throw new CustomException("Only the team leader can change leader.");
+        }
 
-		former.leader = true;
-		this.leader = false;
-	}
+        former.leader = true;
+        this.leader = false;
+    }
 }

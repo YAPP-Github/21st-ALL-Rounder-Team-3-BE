@@ -1,6 +1,7 @@
 package yapp.allround3.project.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import yapp.allround3.project.service.ProjectService;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class ProjectController {
@@ -27,7 +29,9 @@ public class ProjectController {
     @ResponseBody
     @PostMapping("/projects")
     public CustomResponse<String> createProject(
-            @RequestBody ProjectRequest projectRequest){
+            @RequestBody ProjectRequest projectRequest,
+            HttpServletRequest request
+    ){
         Project project = Project.builder().
                 name(projectRequest.getName()).
                 startDate(projectRequest.getStartDate()).
@@ -38,6 +42,7 @@ public class ProjectController {
                 build();
 
         projectService.saveProject(project);
+
         return CustomResponse.success("project create success");
     }
 
@@ -77,15 +82,16 @@ public class ProjectController {
     @ResponseBody
     @GetMapping("/projects/{projectId}")
     public CustomResponse<ProjectResponse> findProjectById(
-            @PathVariable Long projectId,
-            @RequestParam(name = "member-id") Long memberId){
+            @PathVariable Long projectId, HttpServletRequest request){
         //TODO Id 암호화 로직 AOP로 변경
+        Long memberId = (Long)request.getAttribute("memberId");
         Member member = projectService.findMember(memberId);
         Project project = projectService.findProjectById(projectId);
         List<ParticipantDto> participantDtos = participantService
                 .findParticipantsByProject(project).stream()
                 .map(ParticipantDto::of)
                 .toList();
+        log.info(member.getId().toString(),project.getId().toString());
         Long myParticipantId = projectService.findMyParticipantId(member,project);
         ProjectResponse response = ProjectResponse.of(project, myParticipantId, participantDtos);
 

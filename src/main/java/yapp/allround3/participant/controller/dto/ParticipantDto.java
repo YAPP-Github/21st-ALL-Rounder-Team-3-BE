@@ -19,7 +19,7 @@ public class ParticipantDto {
         participantDto.setId(participant.getId());
         participantDto.setName(participant.getMember().getName());
         participantDto.setImageUrl(participant.getMember().getImageUrl());
-        participantDto.setLeader(participant.getLeader());
+        participantDto.setLeader(participant.isLeader());
         return participantDto;
     }
 }

@@ -38,3 +38,4 @@ out/
 
 ### Custom ###
 application.yml
+/src/main/java/yapp/allround3/common/security/Secret.java

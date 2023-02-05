@@ -37,17 +37,16 @@ public class Task extends BaseTimeEntity {
     @Enumerated(value = EnumType.STRING)
     private TaskStatus status;
 
-    @Formula("(SELECT count(*) FROM feedback f WHERE f.task_id= id)")
+    @Formula("(SELECT count(*) FROM feedback f WHERE f.task_id= task_id)")
     private int confirmCount;
 
     @Builder
-    public Task(Participant participant, LocalDate startDate, LocalDate dueDate, String title, String memo, int completionCount, TaskStatus status) {
+    public Task(Participant participant, LocalDate startDate, LocalDate dueDate, String title, String memo, TaskStatus status) {
         this.participant = participant;
         this.startDate = startDate;
         this.dueDate = dueDate;
         this.title = title;
         this.memo = memo;
-        this.confirmCount = completionCount;
         this.status = status;
     }
 }

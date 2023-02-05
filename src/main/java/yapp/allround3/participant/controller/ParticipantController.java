@@ -17,9 +17,11 @@ import yapp.allround3.participant.controller.dto.ParticipantResponse;
 import yapp.allround3.participant.domain.Participant;
 import yapp.allround3.participant.service.ParticipantService;
 
+
 @RestController
 @RequiredArgsConstructor
 public class ParticipantController {
+
 	private final ParticipantService participantService;
 
 	@PostMapping("projects/{projectId}")
@@ -60,4 +62,5 @@ public class ParticipantController {
 
 		return CustomResponse.success(result);
 	}
+
 }

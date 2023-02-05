@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import yapp.allround3.participant.domain.Participant;
 import yapp.allround3.task.domain.Task;
+import yapp.allround3.task.domain.TaskContent;
 import yapp.allround3.task.domain.TaskStatus;
 
 import java.time.LocalDate;
@@ -23,7 +24,9 @@ public class TaskResponse {
         private int confirmCount;
         private int participantCount;
 
-        public static TaskInfo of(Task task, Participant participant,int participantCount){
+        private List<TaskContentInfo> taskContents;
+
+        public static TaskInfo of(Task task, Participant participant,int participantCount, List<TaskContent> taskContents){
             TaskInfo taskInfo = new TaskInfo();
             MemberInfo representative = MemberInfo.of(participant);
 
@@ -36,27 +39,11 @@ public class TaskResponse {
             taskInfo.setTaskStatus(task.getStatus());
             taskInfo.setConfirmCount(task.getConfirmCount());
             taskInfo.setParticipantCount(participantCount);
+
+            List<TaskContentInfo> taskContentInfos = taskContents.stream().map(TaskContentInfo::of).toList();
+            taskInfo.setTaskContents(taskContentInfos);
+
             return taskInfo;
-        }
-    }
-
-    //태스크 단건 조회시 피드백한 인원/안한 인원의 정보까지 조회하는 dto
-    @Data
-    @NoArgsConstructor
-    public static class DetailedTaskInfo{
-        private TaskInfo taskInfo;
-        private List<MemberInfo> confirmedMemberInfos;
-
-        public static DetailedTaskInfo of(Task task, Participant participant, int participantCount,
-                                          List<Participant> confirmed){
-            //participantCount - task entity에 포함 시키는 게 나아보임
-            DetailedTaskInfo detailedTaskInfo = new DetailedTaskInfo();
-            TaskInfo taskInfo = TaskInfo.of(task,participant,participantCount);
-            detailedTaskInfo.setTaskInfo(taskInfo);
-            List<MemberInfo> confirmedMemberInfos = confirmed.stream().map(MemberInfo::of).toList();
-            detailedTaskInfo.setConfirmedMemberInfos(confirmedMemberInfos);
-
-            return detailedTaskInfo;
         }
     }
 
@@ -75,5 +62,22 @@ public class TaskResponse {
             return memberInfo;
         }
     }
+
+    @Data
+    @NoArgsConstructor
+    static class TaskContentInfo{
+        private Long taskContentId;
+        private String title;
+        private String url;
+
+        public static TaskContentInfo of(TaskContent taskContent){
+            TaskContentInfo taskContentInfo= new TaskContentInfo();
+            taskContentInfo.setTaskContentId(taskContent.getId());
+            taskContentInfo.setUrl(taskContent.getUrl());
+            taskContentInfo.setTitle(taskContent.getTitle());
+            return taskContentInfo;
+        }
+    }
 }
+
 

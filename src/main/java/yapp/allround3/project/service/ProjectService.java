@@ -20,45 +20,44 @@ import yapp.allround3.project.repository.ProjectRepository;
 @Transactional(readOnly = true)
 public class ProjectService {
 
-	private final ProjectRepository projectRepository;
-	private final ParticipantRepository participantRepository;
-	private final MemberRepository memberRepository;
+    private final ProjectRepository projectRepository;
+    private final ParticipantRepository participantRepository;
+    private final MemberRepository memberRepository;
 
-	@Transactional
-	public Project save(Project project) {
-		return projectRepository.save(project);
-	}
-
-	public Member findMember(Long memberId){
-		return memberRepository.findById(memberId)
-			.orElseThrow();
-	}
-
-	public Participant findParticipantById(Long participantId){
-		return participantRepository.findParticipantById(participantId);
-	}
-
-
-
-	public List<Project> findProjectByMember(Member member) {
-		List<Participant> participants = participantRepository.findByMember(member);
-
-		return participants.stream()
-			.map(Participant::getProject)
-			.toList();
-	}
-
-    public Project findProjectById(Long projectId) {
-		Optional<Project> project = projectRepository.findById(projectId);
-		return project.orElseThrow(()->new CustomException("존재하지 않는 프로젝트입니다."));
+    @Transactional
+    public Project save(Project project) {
+        return projectRepository.save(project);
     }
 
-	//TODO Participant 조회 부분 의존성 정리
-	public Long findMyParticipantId(Member member,Project project){
-		return participantRepository.findParticipantByProjectAndMember(project,member).getId();
-	}
+    public Member findMember(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow();
+    }
 
-	public int findParticipantCountByProject(Project project){
-		return participantRepository.countParticipantByProject(project);
-	}
+    public Participant findParticipantById(Long participantId) {
+        return participantRepository.findParticipantById(participantId).orElseThrow(()->new CustomException("존재하지 않는 참여자입니다."));
+    }
+
+
+    public List<Project> findProjectByMember(Member member) {
+        List<Participant> participants = participantRepository.findByMember(member);
+
+        return participants.stream()
+                .map(Participant::getProject)
+                .toList();
+    }
+
+    public Project findProjectById(Long projectId) {
+        Optional<Project> project = projectRepository.findById(projectId);
+        return project.orElseThrow(() -> new CustomException("존재하지 않는 프로젝트입니다."));
+    }
+
+    //TODO Participant 조회 부분 의존성 정리
+    public Long findMyParticipantId(Member member, Project project) {
+        return participantRepository.findParticipantByProjectAndMember(project, member).orElseThrow().getId();
+    }
+
+    public int findParticipantCountByProject(Project project) {
+        return participantRepository.countParticipantByProject(project);
+    }
 }

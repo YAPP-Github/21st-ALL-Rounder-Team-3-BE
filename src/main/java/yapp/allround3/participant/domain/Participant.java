@@ -35,6 +35,12 @@ public class Participant extends BaseTimeEntity {
 
     private boolean leader;
 
+    public static Participant initProject(Project project, Member member) {
+        Participant participant = from(project, member);
+        participant.leader = true;
+        return participant;
+    }
+
     public static Participant from(Project project, Member member) {
         Participant participant = new Participant();
         participant.member = member;

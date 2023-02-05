@@ -48,4 +48,29 @@ public class Project extends BaseTimeEntity {
 		this.projectStatus= projectStatus;
 		this.participantCount = participantCount;
 	}
+
+
+	public void updateName(String name) {
+		this.name = name;
+	}
+
+	public void updateStartDate(LocalDate startDate) {
+		this.startDate = startDate;
+	}
+
+	public void updateDueDate(LocalDate dueDate) {
+		this.dueDate = dueDate;
+	}
+
+	public void updateGoal(String goal) {
+		this.goal = goal;
+	}
+
+	public void updateDifficulty(Difficulty difficulty) {
+		this.difficulty = difficulty;
+	}
+
+	public void updateProjectStatus(ProjectStatus projectStatus) {
+		this.projectStatus = projectStatus;
+	}
 }

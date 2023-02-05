@@ -9,10 +9,10 @@ import yapp.allround3.member.domain.Member;
 import yapp.allround3.member.service.MemberService;
 import yapp.allround3.participant.controller.dto.ParticipantDto;
 import yapp.allround3.participant.service.ParticipantService;
+import yapp.allround3.project.controller.dto.ProjectRequest;
 import yapp.allround3.project.controller.dto.ProjectResponse;
 import yapp.allround3.project.domain.Project;
 import yapp.allround3.project.service.ProjectService;
-import yapp.allround3.task.service.TaskService;
 
 import java.util.List;
 
@@ -24,6 +24,32 @@ public class ProjectController {
     private final ProjectService projectService;
     private final ParticipantService participantService;
 
+    @ResponseBody
+    @PostMapping("/projects")
+    public CustomResponse<String> createProject(
+            @RequestBody ProjectRequest projectRequest){
+        Project project = Project.builder().
+                name(projectRequest.getName()).
+                startDate(projectRequest.getStartDate()).
+                dueDate(projectRequest.getDueDate()).
+                goal(projectRequest.getGoal()).
+                difficulty(projectRequest.getDifficulty()).
+                projectStatus(projectRequest.getProjectStatus()).
+                build();
+
+        projectService.saveProject(project);
+        return CustomResponse.success("project create success");
+    }
+
+    @ResponseBody
+    @PutMapping("/projects/{projectId}")
+    public CustomResponse<String> updateProject(
+            @RequestBody ProjectRequest projectRequest,
+            @PathVariable Long projectId) {
+
+        projectService.updateProject(projectId, projectRequest);
+        return CustomResponse.success("project update success");
+    }
 
     @ResponseBody
     @GetMapping("/projects")

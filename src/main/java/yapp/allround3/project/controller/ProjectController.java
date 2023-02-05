@@ -41,7 +41,9 @@ public class ProjectController {
                 projectStatus(projectRequest.getProjectStatus()).
                 build();
 
-        projectService.saveProject(project);
+        Long memberId = (Long)request.getAttribute("memberId");
+
+        projectService.saveProject(project, memberId);
 
         return CustomResponse.success("project create success");
     }
@@ -85,7 +87,7 @@ public class ProjectController {
             @PathVariable Long projectId, HttpServletRequest request){
         //TODO Id 암호화 로직 AOP로 변경
         Long memberId = (Long)request.getAttribute("memberId");
-        Member member = projectService.findMember(memberId);
+        Member member = memberService.findMemberById(memberId);
         Project project = projectService.findProjectById(projectId);
         List<ParticipantDto> participantDtos = participantService
                 .findParticipantsByProject(project).stream()

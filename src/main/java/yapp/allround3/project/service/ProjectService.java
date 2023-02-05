@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import yapp.allround3.common.exception.CustomException;
 import yapp.allround3.member.domain.Member;
-import yapp.allround3.member.repository.MemberRepository;
+import yapp.allround3.member.service.MemberService;
 import yapp.allround3.participant.domain.Participant;
 import yapp.allround3.participant.repository.ParticipantRepository;
 import yapp.allround3.project.controller.dto.ProjectRequest;
@@ -25,22 +25,18 @@ public class ProjectService {
 
     private final ProjectRepository projectRepository;
     private final ParticipantRepository participantRepository;
-    private final MemberRepository memberRepository;
+    private final MemberService memberService;
 
     @Transactional
-    public Project saveProject(Project project) {
-        return projectRepository.save(project);
-    }
+    public Project saveProject(Project project, Long memberId) {
+        Project saveProject = projectRepository.save(project);
+        Member member = memberService.findMemberById(memberId);
 
-    public Member findMember(Long memberId) {
-        return memberRepository.findById(memberId)
-                .orElseThrow();
-    }
+        Participant participant = Participant.initProject(saveProject, member);
+        participantRepository.save(participant);
 
-    public Participant findParticipantById(Long participantId) {
-        return participantRepository.findParticipantById(participantId).orElseThrow(()->new CustomException("존재하지 않는 참여자입니다."));
+        return saveProject;
     }
-
 
     public List<Project> findProjectByMember(Member member) {
         List<Participant> participants = participantRepository.findByMember(member);

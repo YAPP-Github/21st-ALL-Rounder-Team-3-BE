@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Formula;
 import yapp.allround3.common.entity.BaseTimeEntity;
 import yapp.allround3.participant.domain.Participant;
+import yapp.allround3.project.domain.Project;
 
 import java.time.LocalDate;
 
@@ -22,7 +23,7 @@ public class Task extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="participant_id")
+    @JoinColumn(name = "participant_id")
     private Participant participant;
 
     private LocalDate startDate;
@@ -40,6 +41,8 @@ public class Task extends BaseTimeEntity {
     @Formula("(SELECT count(*) FROM feedback f WHERE f.task_id= task_id)")
     private int confirmCount;
 
+
+
     @Builder
     public Task(Participant participant, LocalDate startDate, LocalDate dueDate, String title, String memo, TaskStatus status) {
         this.participant = participant;
@@ -48,5 +51,25 @@ public class Task extends BaseTimeEntity {
         this.title = title;
         this.memo = memo;
         this.status = status;
+    }
+
+    public void updateTitle(String title) {
+        this.title = title;
+    }
+
+    public void updateStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public void updateDueDate(LocalDate dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public void updateMemo(String memo) {
+        this.memo = memo;
+    }
+
+    public void updateTaskStatus(TaskStatus taskStatus) {
+        this.status = taskStatus;
     }
 }

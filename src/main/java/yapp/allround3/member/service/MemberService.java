@@ -53,8 +53,8 @@ public class MemberService {
     }
 
     @Transactional
-    public void updateMember(Long memberId, MemberUpdateRequest memberUpdateRequest) {
-        Member member = memberRepository.findById(memberId)
+    public void updateMember(MemberUpdateRequest memberUpdateRequest) {
+        Member member = memberRepository.findById(memberUpdateRequest.getMemberId())
             .orElseThrow(() -> new CustomException("해당 멤버가 존재하지 않습니다."));
 
         member.update(memberUpdateRequest);

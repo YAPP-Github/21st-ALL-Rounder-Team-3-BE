@@ -34,9 +34,10 @@ public class MemberController {
 	@PutMapping("")
 	public void updateMember(
 		HttpServletRequest request,
-		MemberUpdateRequest memberUpdateRequest
+		@RequestBody MemberUpdateRequest memberUpdateRequest
 	) {
 		Long memberId = (Long)request.getAttribute("memberId");
-		memberService.updateMember(memberId, memberUpdateRequest);
+		memberUpdateRequest.setMemberId(memberId);
+		memberService.updateMember(memberUpdateRequest);
 	}
 }

@@ -56,4 +56,14 @@ public class Participant extends BaseTimeEntity {
         former.leader = true;
         this.leader = false;
     }
+
+    @Override
+    public String toString() {
+        return "Participant{" +
+                "id=" + id +
+                ", project=" + project.getId() +
+                ", member=" + member.getId() +
+                ", leader=" + leader +
+                '}';
+    }
 }

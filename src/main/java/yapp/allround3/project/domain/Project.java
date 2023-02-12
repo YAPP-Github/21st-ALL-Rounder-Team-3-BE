@@ -34,12 +34,15 @@ public class Project extends BaseTimeEntity {
 	@Enumerated(value = EnumType.STRING)
 	private ProjectStatus projectStatus;
 
+	@Enumerated(value = EnumType.STRING)
+	private ProjectImage projectImage;
+
 	@Formula("(SELECT count(*) FROM participant p where p.participant_id=project_id)")
 	private int participantCount;
 
 	@Builder
 	private Project(String name, LocalDate startDate, LocalDate dueDate,String goal, Difficulty difficulty,ProjectStatus projectStatus,
-					int participantCount) {
+					int participantCount, ProjectImage projectImage) {
 		this.name = name;
 		this.startDate = startDate;
 		this.dueDate = dueDate;
@@ -47,6 +50,7 @@ public class Project extends BaseTimeEntity {
 		this.difficulty = difficulty;
 		this.projectStatus= projectStatus;
 		this.participantCount = participantCount;
+		this.projectImage = projectImage;
 	}
 
 

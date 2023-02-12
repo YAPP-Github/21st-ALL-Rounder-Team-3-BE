@@ -51,6 +51,9 @@ public class ProjectService {
     }
 
     public Long findMyParticipantId(Member member, Project project) {
+        if(participantRepository.findParticipantByProjectAndMember(project, member).isEmpty()){
+            return null;
+        }
         return participantRepository.findParticipantByProjectAndMember(project, member).orElseThrow().getId();
     }
 

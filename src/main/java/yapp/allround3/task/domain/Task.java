@@ -38,6 +38,8 @@ public class Task extends BaseTimeEntity {
     @Enumerated(value = EnumType.STRING)
     private TaskStatus status;
 
+    private LocalDate feedbackRequestedDate;
+
     @Formula("(SELECT count(*) FROM feedback f WHERE f.task_id= task_id)")
     private int confirmCount;
 
@@ -71,5 +73,9 @@ public class Task extends BaseTimeEntity {
 
     public void updateTaskStatus(TaskStatus taskStatus) {
         this.status = taskStatus;
+    }
+
+    public void updateFeedbackRequestedDate(LocalDate feedbackRequestedDate){
+        this.feedbackRequestedDate = feedbackRequestedDate;
     }
 }

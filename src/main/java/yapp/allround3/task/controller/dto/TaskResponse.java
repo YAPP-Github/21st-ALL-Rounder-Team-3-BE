@@ -22,6 +22,7 @@ public class TaskResponse {
         private LocalDate dueDate;
         private String memo;
         private TaskStatus taskStatus;
+        private LocalDate feedbackRequestedDate;
         private int confirmCount;
         private int participantCount;
 
@@ -40,6 +41,7 @@ public class TaskResponse {
             taskInfo.setTaskStatus(task.getStatus());
             taskInfo.setConfirmCount(task.getConfirmCount());
             taskInfo.setParticipantCount(participantCount);
+            taskInfo.setFeedbackRequestedDate(task.getFeedbackRequestedDate());
 
             List<TaskContentInfo> taskContentInfos = taskContents.stream().map(TaskContentInfo::of).toList();
             taskInfo.setTaskContents(taskContentInfos);

@@ -2,7 +2,7 @@ package yapp.allround3.task.domain;
 
 public enum TaskStatus {
     BEFORE,
-    IN_PROGRESS,
+    INPROGRESS,
     FEEDBACK,
     DONE,
     LATE

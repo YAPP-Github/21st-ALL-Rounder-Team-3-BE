@@ -10,6 +10,7 @@ import yapp.allround3.member.domain.Member;
 import yapp.allround3.member.service.MemberService;
 import yapp.allround3.participant.controller.dto.ParticipantDto;
 import yapp.allround3.participant.service.ParticipantService;
+import yapp.allround3.project.controller.dto.ProjectCreateResponse;
 import yapp.allround3.project.controller.dto.ProjectRequest;
 import yapp.allround3.project.controller.dto.ProjectResponse;
 import yapp.allround3.project.domain.Project;
@@ -29,10 +30,10 @@ public class ProjectController {
 
     @ResponseBody
     @PostMapping("/projects")
-    public CustomResponse<String> createProject(
+    public CustomResponse<ProjectCreateResponse> createProject(
             @RequestBody ProjectRequest projectRequest,
             HttpServletRequest request
-    ){
+    ) {
         Project project = Project.builder().
                 name(projectRequest.getName()).
                 startDate(projectRequest.getStartDate()).
@@ -42,11 +43,13 @@ public class ProjectController {
                 projectStatus(projectRequest.getProjectStatus()).
                 build();
 
-        Long memberId = (Long)request.getAttribute("memberId");
+        Long memberId = (Long) request.getAttribute("memberId");
 
-        projectService.saveProject(project, memberId);
+        Project savedProject = projectService.saveProject(project, memberId);
 
-        return CustomResponse.success("project create success");
+        ProjectCreateResponse projectCreateResponse = ProjectCreateResponse.of(savedProject.getId(),
+                savedProject.getCreatedDate());
+        return CustomResponse.success(projectCreateResponse);
     }
 
     @ResponseBody
@@ -63,9 +66,9 @@ public class ProjectController {
     @GetMapping("/projects")
     public CustomResponse<List<ProjectResponse>> findProjectsByMember(
             HttpServletRequest request
-    ){
+    ) {
 
-        Long memberId = (Long)request.getAttribute("memberId");
+        Long memberId = (Long) request.getAttribute("memberId");
         Member member = memberService.findMemberById(memberId);
         List<Project> projects = projectService.findProjectByMember(member);
         List<ProjectResponse> responses = projects.stream()
@@ -75,7 +78,7 @@ public class ProjectController {
                             .map(ParticipantDto::of)
                             .toList();
                     //추후 내 task 조회를 위해 나의 해당 프로젝트 참여자 id 필드 추가
-                    Long myParticipantId = projectService.findMyParticipantId(member,project);
+                    Long myParticipantId = projectService.findMyParticipantId(member, project);
                     return ProjectResponse.of(project, myParticipantId, participantDtos);
                 }).toList();
 
@@ -85,24 +88,21 @@ public class ProjectController {
     @ResponseBody
     @GetMapping("/projects/{projectId}")
     public CustomResponse<ProjectResponse> findProjectById(
-            @PathVariable Long projectId, HttpServletRequest request){
+            @PathVariable Long projectId, HttpServletRequest request) {
         //TODO Id 암호화 로직 AOP로 변경
-        Long memberId = (Long)request.getAttribute("memberId");
+        Long memberId = (Long) request.getAttribute("memberId");
         Member member = memberService.findMemberById(memberId);
         Project project = projectService.findProjectById(projectId);
         List<ParticipantDto> participantDtos = participantService
                 .findParticipantsByProject(project).stream()
                 .map(ParticipantDto::of)
                 .toList();
-        log.info(member.getId().toString(),project.getId().toString());
-        Long myParticipantId = projectService.findMyParticipantId(member,project);
+        log.info(member.getId().toString(), project.getId().toString());
+        Long myParticipantId = projectService.findMyParticipantId(member, project);
         ProjectResponse response = ProjectResponse.of(project, myParticipantId, participantDtos);
 
         return CustomResponse.success(response);
     }
-
-
-
 
 
 }

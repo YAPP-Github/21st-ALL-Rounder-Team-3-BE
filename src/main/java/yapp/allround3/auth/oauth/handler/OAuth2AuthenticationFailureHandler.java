@@ -22,7 +22,7 @@ public class OAuth2AuthenticationFailureHandler implements AuthenticationFailure
 		HttpServletResponse httpServletResponse,
 		AuthenticationException e
 	) throws IOException {
-		log.warn("login failure!");
+		log.warn("[login failure] ", e);
 
 		httpServletResponse.sendRedirect("/auth/callback?appToken=");
 	}

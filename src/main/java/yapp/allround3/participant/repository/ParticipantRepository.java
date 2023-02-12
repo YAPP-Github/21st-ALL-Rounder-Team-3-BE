@@ -17,7 +17,7 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
 
 	List<Participant> findByMember(Member member);
 
-	@Query("select p from Participant p join fetch p.member")
+	@Query("select p from Participant p join fetch p.member where p.project = :project")
 	List<Participant> findParticipantsByProject(Project project);
 
 	int countParticipantByProject(Project project);

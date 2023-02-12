@@ -8,14 +8,13 @@ import yapp.allround3.participant.domain.Participant;
 import yapp.allround3.participant.service.ParticipantService;
 import yapp.allround3.project.domain.Project;
 import yapp.allround3.project.service.ProjectService;
-import yapp.allround3.task.controller.dto.TaskContentRequest;
-import yapp.allround3.task.controller.dto.TaskCreateRequest;
-import yapp.allround3.task.controller.dto.TaskResponse;
-import yapp.allround3.task.controller.dto.TaskUpdateRequest;
+import yapp.allround3.task.controller.dto.*;
 import yapp.allround3.task.domain.Task;
 import yapp.allround3.task.domain.TaskContent;
+import yapp.allround3.task.domain.TaskStatus;
 import yapp.allround3.task.service.TaskService;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -64,8 +63,15 @@ public class TaskController {
                                              @PathVariable Long taskId) {
 
         taskService.updateTask(taskUpdateRequest);
-
         return CustomResponse.success("update task success");
+    }
+
+    @PatchMapping("/tasks/{taskId}/status")
+    public CustomResponse<String> updateTaskStatus(@RequestBody TaskStatusUpdateRequest taskStatusUpdateRequest,
+                                                   @PathVariable Long taskId) {
+
+        taskService.updateTaskStatus(taskId, taskStatusUpdateRequest.getTaskStatus());
+        return CustomResponse.success("update task status");
     }
 
     @PostMapping("/tasks/{taskId}/taskContents")

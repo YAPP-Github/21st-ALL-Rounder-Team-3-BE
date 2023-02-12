@@ -10,8 +10,11 @@ import yapp.allround3.task.controller.dto.TaskContentRequest;
 import yapp.allround3.task.controller.dto.TaskUpdateRequest;
 import yapp.allround3.task.domain.Task;
 import yapp.allround3.task.domain.TaskContent;
+import yapp.allround3.task.domain.TaskStatus;
 import yapp.allround3.task.repository.TaskContentRepository;
 import yapp.allround3.task.repository.TaskRepository;
+
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -69,6 +72,16 @@ public class TaskService {
         task.updateMemo(taskUpdateRequest.getMemo());
         task.updateTitle(taskUpdateRequest.getTitle());
         task.updateStartDate(taskUpdateRequest.getStartDate());
+        taskRepository.save(task);
+    }
+
+    @Transactional
+    public void updateTaskStatus(Long taskId, TaskStatus taskStatus) {
+        Task task = findTaskById(taskId);
+        if (taskStatus == TaskStatus.FEEDBACK) {
+            task.updateFeedbackRequestedDate(LocalDate.now().plusDays(3));
+        }
+        task.updateTaskStatus(taskStatus);
         taskRepository.save(task);
     }
 }

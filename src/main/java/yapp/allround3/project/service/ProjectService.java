@@ -32,7 +32,8 @@ public class ProjectService {
         Project saveProject = projectRepository.save(project);
         Member member = memberService.findMemberById(memberId);
 
-        Participant.initProject(saveProject, member);
+        Participant participant = Participant.initProject(saveProject, member);
+        participantRepository.save(participant);
 
         return saveProject;
     }

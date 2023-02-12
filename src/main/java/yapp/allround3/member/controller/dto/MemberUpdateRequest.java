@@ -6,14 +6,8 @@ import yapp.allround3.member.domain.Member;
 
 @Data
 @AllArgsConstructor
-public class MemberRequest {
-	private String email;
+public class MemberUpdateRequest {
 	private String nickname;
 	private String imageUrl;
-
-	public static MemberResponse of(Member member) {
-		return new MemberResponse(member.getEmail(),
-			member.getName(),
-			member.getImageUrl());
-	}
+	private String introduction;
 }

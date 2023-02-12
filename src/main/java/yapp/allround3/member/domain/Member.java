@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import yapp.allround3.auth.oauth.Provider;
 import yapp.allround3.common.entity.BaseTimeEntity;
+import yapp.allround3.member.controller.dto.MemberUpdateRequest;
 
 @Entity
 @Getter
@@ -34,6 +35,8 @@ public class Member extends BaseTimeEntity {
 
 	private String oauthId;
 
+	private String introduction;
+
 	@Builder
 	public Member(String name, String email, String imageUrl, Provider provider, String oauthId) {
 		this.name = name;
@@ -41,5 +44,11 @@ public class Member extends BaseTimeEntity {
 		this.imageUrl = imageUrl;
 		this.provider = provider;
 		this.oauthId = oauthId;
+	}
+
+	public void update(MemberUpdateRequest memberUpdateRequest) {
+		this.name = memberUpdateRequest.getNickname();
+		this.imageUrl = memberUpdateRequest.getImageUrl();
+		this.introduction = memberUpdateRequest.getIntroduction();
 	}
 }

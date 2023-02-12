@@ -14,6 +14,7 @@ import yapp.allround3.project.controller.dto.ProjectCreateResponse;
 import yapp.allround3.project.controller.dto.ProjectRequest;
 import yapp.allround3.project.controller.dto.ProjectResponse;
 import yapp.allround3.project.domain.Project;
+import yapp.allround3.project.domain.ProjectImage;
 import yapp.allround3.project.service.ProjectService;
 
 import java.util.List;
@@ -34,6 +35,8 @@ public class ProjectController {
             @RequestBody ProjectRequest projectRequest,
             HttpServletRequest request
     ) {
+        ProjectImage projectImage = ProjectImage.randomProjectThumbnail();
+
         Project project = Project.builder().
                 name(projectRequest.getName()).
                 startDate(projectRequest.getStartDate()).
@@ -41,6 +44,7 @@ public class ProjectController {
                 goal(projectRequest.getGoal()).
                 difficulty(projectRequest.getDifficulty()).
                 projectStatus(projectRequest.getProjectStatus()).
+                projectImage(projectImage).
                 build();
 
         Long memberId = (Long) request.getAttribute("memberId");
@@ -97,7 +101,7 @@ public class ProjectController {
                 .findParticipantsByProject(project).stream()
                 .map(ParticipantDto::of)
                 .toList();
-        log.info(member.getId().toString(), project.getId().toString());
+        log.info(participantService.findParticipantsByProject(project).toString());
         Long myParticipantId = projectService.findMyParticipantId(member, project);
         ProjectResponse response = ProjectResponse.of(project, myParticipantId, participantDtos);
 

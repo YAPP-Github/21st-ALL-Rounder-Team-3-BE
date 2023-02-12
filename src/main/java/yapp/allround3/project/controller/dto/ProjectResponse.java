@@ -9,10 +9,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import yapp.allround3.common.security.SecurityUtils;
 import yapp.allround3.participant.controller.dto.ParticipantDto;
 import yapp.allround3.project.domain.Difficulty;
 import yapp.allround3.project.domain.Project;
@@ -33,6 +31,8 @@ public class ProjectResponse {
 	private ProjectStatus projectStatus;
 	private Long progress;
 	private List<ParticipantDto> participantInfos;
+	private String projectThumbnailUrl;
+	private String teamThumbnailUrl;
 	private Long myParticipantId;
 
 	public static ProjectResponse of(Project project, Long myParticipantId, List<ParticipantDto> participantDtos){
@@ -48,6 +48,8 @@ public class ProjectResponse {
 		projectResponse.setDifficulty(project.getDifficulty());
 		projectResponse.setProjectStatus(project.getProjectStatus());
 		projectResponse.setMyParticipantId(myParticipantId);
+		projectResponse.setProjectThumbnailUrl(project.getProjectImage().getProjectThumbnailUrl());
+		projectResponse.setTeamThumbnailUrl(project.getProjectImage().getTeamThumbnailUrl());
 		if(project.getProjectStatus()==ProjectStatus.COMPLETED){
 			projectResponse.setProgress(100L);
 		}

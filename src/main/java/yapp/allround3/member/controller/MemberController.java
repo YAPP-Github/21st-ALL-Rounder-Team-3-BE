@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import yapp.allround3.common.dto.CustomResponse;
 import yapp.allround3.member.controller.dto.MemberResponse;
+import yapp.allround3.member.controller.dto.MemberUpdateRequest;
 import yapp.allround3.member.domain.Member;
 import yapp.allround3.member.service.MemberService;
 
@@ -27,5 +28,15 @@ public class MemberController {
 		MemberResponse memberResponse = MemberResponse.of(member);
 
 		return CustomResponse.success(memberResponse);
+	}
+
+	@ResponseBody
+	@PutMapping("")
+	public void updateMember(
+		HttpServletRequest request,
+		MemberUpdateRequest memberUpdateRequest
+	) {
+		Long memberId = (Long)request.getAttribute("memberId");
+		memberService.updateMember(memberId, memberUpdateRequest);
 	}
 }

@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import yapp.allround3.common.exception.CustomException;
 import yapp.allround3.member.controller.dto.MemberResponse;
 import yapp.allround3.auth.oauth.Provider;
+import yapp.allround3.member.controller.dto.MemberUpdateRequest;
 import yapp.allround3.member.domain.Member;
 import yapp.allround3.member.repository.MemberRepository;
 import yapp.allround3.participant.domain.Participant;
@@ -51,4 +52,12 @@ public class MemberService {
                 toList();
     }
 
+    @Transactional
+    public void updateMember(Long memberId, MemberUpdateRequest memberUpdateRequest) {
+        Member member = memberRepository.findById(memberId)
+            .orElseThrow(() -> new CustomException("해당 멤버가 존재하지 않습니다."));
+
+        member.update(memberUpdateRequest);
+        memberRepository.save(member);
+    }
 }

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import yapp.allround3.common.exception.CustomException;
 import yapp.allround3.participant.domain.Participant;
+import yapp.allround3.task.controller.dto.TaskContentRequest;
 import yapp.allround3.task.controller.dto.TaskUpdateRequest;
 import yapp.allround3.task.domain.Task;
 import yapp.allround3.task.domain.TaskContent;
@@ -53,8 +54,8 @@ public class TaskService {
     }
 
     @Transactional
-    public void updateTaskContent(TaskUpdateRequest.TaskContentRequest taskContentRequest) {
-        TaskContent taskContent = findTaskContentById(taskContentRequest.getTaskContentId());
+    public void updateTaskContent(Long taskContentId, TaskContentRequest taskContentRequest) {
+        TaskContent taskContent = findTaskContentById(taskContentId);
         taskContent.updateUrl(taskContentRequest.getUrl());
         taskContent.updateTitle(taskContentRequest.getTitle());
         taskContentRepository.save(taskContent);

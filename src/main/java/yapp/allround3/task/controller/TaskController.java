@@ -1,7 +1,6 @@
 package yapp.allround3.task.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import yapp.allround3.common.dto.CustomResponse;
 import yapp.allround3.common.interceptor.NoAuth;
@@ -9,6 +8,7 @@ import yapp.allround3.participant.domain.Participant;
 import yapp.allround3.participant.service.ParticipantService;
 import yapp.allround3.project.domain.Project;
 import yapp.allround3.project.service.ProjectService;
+import yapp.allround3.task.controller.dto.TaskContentRequest;
 import yapp.allround3.task.controller.dto.TaskCreateRequest;
 import yapp.allround3.task.controller.dto.TaskResponse;
 import yapp.allround3.task.controller.dto.TaskUpdateRequest;
@@ -17,7 +17,6 @@ import yapp.allround3.task.domain.TaskContent;
 import yapp.allround3.task.service.TaskService;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -43,7 +42,7 @@ public class TaskController {
 
     @PostMapping("/projects/{projectId}/tasks")
     public CustomResponse<String> createTask(@PathVariable Long projectId,
-            @RequestBody TaskCreateRequest taskCreateRequest) {
+                                             @RequestBody TaskCreateRequest taskCreateRequest) {
         Participant participant = participantService.findParticipantById(taskCreateRequest.getParticipantId());
         Task task = (Task.builder().
                 title(taskCreateRequest.getTitle())
@@ -57,15 +56,6 @@ public class TaskController {
 
         taskService.saveTask(task);
 
-        List<TaskContent> taskContents = taskCreateRequest.getTaskContents()
-                .stream().map(taskContentRequest -> TaskContent.builder()
-                        .url(taskContentRequest.getUrl())
-                        .task(task)
-                        .title(taskContentRequest.getTitle())
-                        .build()).toList();
-
-        taskService.saveTaskContents(taskContents);
-
         return CustomResponse.success("create task success");
     }
 
@@ -74,9 +64,32 @@ public class TaskController {
                                              @PathVariable Long taskId) {
 
         taskService.updateTask(taskUpdateRequest);
-        taskUpdateRequest.getTaskContents().forEach(taskService::updateTaskContent);
 
         return CustomResponse.success("update task success");
+    }
+
+    @PostMapping("/tasks/{taskId}/taskContents")
+    public CustomResponse<String> createTaskContent(@RequestBody TaskContentRequest taskContentRequest,
+                                                    @PathVariable Long taskId) {
+
+        Task task = taskService.findTaskById(taskId);
+        TaskContent taskContent = TaskContent.builder().
+                title(taskContentRequest.getTitle()).
+                url(taskContentRequest.getUrl()).
+                task(task).build();
+        taskService.saveTaskContent(taskContent);
+
+        return CustomResponse.success("create task Content success");
+    }
+
+    @PutMapping("/tasks/{taskId}/taskContents/{taskContentId}")
+    public CustomResponse<String> updateTaskContent(@RequestBody TaskContentRequest taskContentRequest,
+                                                    @PathVariable Long taskId,
+                                                    @PathVariable Long taskContentId) {
+
+        taskService.updateTaskContent(taskContentId, taskContentRequest);
+
+        return CustomResponse.success("update task Content success");
     }
 
     @NoAuth

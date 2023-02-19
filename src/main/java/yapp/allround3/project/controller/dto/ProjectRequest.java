@@ -9,11 +9,12 @@ import yapp.allround3.project.domain.ProjectStatus;
 
 @Data
 public class ProjectRequest {
-
     private String name;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dueDate;
     private String goal;
+    private Difficulty difficulty;
+    private ProjectStatus projectStatus;
 }

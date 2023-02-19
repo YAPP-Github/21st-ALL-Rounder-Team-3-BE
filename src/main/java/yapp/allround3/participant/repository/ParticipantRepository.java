@@ -12,7 +12,7 @@ import yapp.allround3.project.domain.Project;
 import yapp.allround3.task.domain.Task;
 
 public interface ParticipantRepository extends JpaRepository<Participant, Long> {
-	@Query("SELECT p from Participant p join fetch p.member where p.id=:id")
+	// @Query("SELECT p from Participant p join fetch p.member where p.id=:id")
 	Optional<Participant> findParticipantById(Long id);
 
 	List<Participant> findByMember(Member member);

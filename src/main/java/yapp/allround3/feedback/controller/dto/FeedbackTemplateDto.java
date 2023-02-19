@@ -4,7 +4,7 @@ import lombok.Data;
 import yapp.allround3.feedback.domain.FeedbackTemplate;
 
 @Data
-public class FeedbackTemplateDto {
+public class FeedbackTemplateDto implements Comparable<FeedbackTemplateDto> {
 	private int templateId;
 	private int count;
 
@@ -15,5 +15,10 @@ public class FeedbackTemplateDto {
 		feedbackTemplateDto.count = feedbackTemplate.getCount();
 
 		return feedbackTemplateDto;
+	}
+
+	@Override
+	public int compareTo(FeedbackTemplateDto other) {
+		return this.count - other.count;
 	}
 }

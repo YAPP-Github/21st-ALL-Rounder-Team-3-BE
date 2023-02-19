@@ -90,15 +90,6 @@ public class ParticipantService {
 		participant.changeLeader(former);
 	}
 
-	public Participant findParticipantByTaskAndMember(Task task, Member member) {
-		List<Participant> participants = findParticipantsGivenFeedback(task);
-
-		return participants.stream()
-			.filter(participant -> Objects.equals(participant.getMember(), member))
-			.findFirst()
-			.orElseThrow(CustomException::new);
-	}
-
 	public ParticipantFeedbackResponse findParticipantGroupByTask(Long taskId) {
 		Task task = taskRepository.findById(taskId)
 			.orElseThrow(() -> new CustomException("해당 테스크가 없습니다."));
@@ -116,6 +107,11 @@ public class ParticipantService {
 		unConfirmedParticipants.remove(participant);
 
 		return ParticipantFeedbackResponse.of(confirmedParticipants, unConfirmedParticipants);
+	}
+
+	public Participant findParticipantByProjectAndMember(Project project, Member member) {
+		return participantRepository.findParticipantByProjectAndMember(project, member)
+			.orElseThrow(() -> new CustomException("프로젝트에 참여한 멤버가 아닙니다."));
 	}
 
 	private boolean isExistedParticipant(Participant participant) {

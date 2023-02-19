@@ -1,5 +1,7 @@
 package yapp.allround3.feedback.controller.dto;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import lombok.Data;
@@ -17,6 +19,7 @@ public class FeedbackResponse {
 
 		feedbackResponse.templates = feedbackTemplates.stream()
 			.map(FeedbackTemplateDto::from)
+			.sorted(Collections.reverseOrder())
 			.toList();
 
 		feedbackResponse.details = feedbacks.stream()

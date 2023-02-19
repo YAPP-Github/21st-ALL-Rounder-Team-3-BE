@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import yapp.allround3.common.dto.CustomResponse;
+import yapp.allround3.common.exception.CustomException;
 import yapp.allround3.feedback.controller.dto.FeedbackRequest;
 import yapp.allround3.feedback.controller.dto.FeedbackResponse;
 import yapp.allround3.feedback.domain.Feedback;
@@ -17,8 +18,10 @@ import yapp.allround3.feedback.repository.FeedbackTemplateRepository;
 import yapp.allround3.member.domain.Member;
 import yapp.allround3.member.service.MemberService;
 import yapp.allround3.participant.domain.Participant;
+import yapp.allround3.participant.repository.ParticipantRepository;
 import yapp.allround3.participant.service.ParticipantService;
 import yapp.allround3.task.domain.Task;
+import yapp.allround3.task.repository.TaskRepository;
 import yapp.allround3.task.service.TaskService;
 
 @Service
@@ -37,15 +40,20 @@ public class FeedbackService {
 
 		Member member = memberService.findMemberById(feedbackRequest.getMemberId());
 		Task task = taskService.findTaskById(feedbackRequest.getTaskId());
+		Participant participant = participantService.findParticipantByProjectAndMember(
+			task.getParticipant().getProject(), member);
 
-		Participant participant = participantService.findParticipantByTaskAndMember(task, member);
+		if (participant == task.getParticipant()) {
+			throw new CustomException("자신의 업무는 피드백 할 수 없습니다.");
+		}
+
 		List<Integer> checklist = feedbackRequest.getChecklist();
 
 		for (Integer templateId : checklist) {
-			Optional<FeedbackTemplate> byTaskAndTemplateId = feedbackTemplateRepository
-				.findByTaskAndTemplateId(task, templateId);
+			FeedbackTemplate feedbackTemplate = feedbackTemplateRepository
+				.findByTaskAndTemplateId(task, templateId)
+				.orElseGet(() -> FeedbackTemplate.from(task));
 
-			FeedbackTemplate feedbackTemplate = byTaskAndTemplateId.orElseGet(() -> FeedbackTemplate.from(task));
 			feedbackTemplate.addCount();
 			feedbackTemplateRepository.save(feedbackTemplate);
 		}

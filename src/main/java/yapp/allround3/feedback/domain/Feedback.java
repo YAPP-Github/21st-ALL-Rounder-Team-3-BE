@@ -31,10 +31,18 @@ public class Feedback extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT")
     private String contents;
 
+    @Enumerated(value = EnumType.STRING)
+    private FeedbackEvaluation feedbackEvaluation;
+
     @Builder
-    public Feedback(Task task, Participant participant,String contents) {
+    public Feedback(Task task,
+        Participant participant,
+        String contents,
+        FeedbackEvaluation feedbackEvaluation
+    ) {
             this.task = task;
             this.participant=participant;
             this.contents=contents;
+            this.feedbackEvaluation = feedbackEvaluation;
     }
 }

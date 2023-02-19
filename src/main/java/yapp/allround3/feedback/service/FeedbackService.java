@@ -57,7 +57,7 @@ public class FeedbackService {
 		Feedback feedback = Feedback.builder()
 			.task(task)
 			.contents(feedbackRequest.getDetail())
-			.feedbackEvaluation(feedbackRequest.getFeedbackEvaluation())
+			.evaluation(feedbackRequest.getFeedbackEvaluation())
 			.participant(participant)
 			.build();
 
@@ -80,10 +80,10 @@ public class FeedbackService {
 			.isPresent();
 	}
 
-	private void saveFeedbackTemplate(Task task, Integer templateId) {
+	private void saveFeedbackTemplate(Task task, Integer templateKey) {
 		FeedbackTemplate feedbackTemplate = feedbackTemplateRepository
-			.findByTaskAndTemplateId(task, templateId)
-			.orElseGet(() -> FeedbackTemplate.from(task, templateId));
+			.findByTaskAndTemplateKey(task, templateKey)
+			.orElseGet(() -> FeedbackTemplate.from(task, templateKey));
 
 		feedbackTemplate.addCount();
 		feedbackTemplateRepository.save(feedbackTemplate);

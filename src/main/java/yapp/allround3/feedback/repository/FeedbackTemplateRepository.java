@@ -12,7 +12,7 @@ import yapp.allround3.task.domain.Task;
 @Repository
 public interface FeedbackTemplateRepository extends JpaRepository<FeedbackTemplate, Long> {
 
-	Optional<FeedbackTemplate> findByTaskAndTemplateId(Task task, int templateId);
+	Optional<FeedbackTemplate> findByTaskAndTemplateKey(Task task, int templateKey);
 
 	List<FeedbackTemplate> findByTask(Task task);
 }

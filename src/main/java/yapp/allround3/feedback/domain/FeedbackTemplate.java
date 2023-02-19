@@ -2,7 +2,6 @@ package yapp.allround3.feedback.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import yapp.allround3.common.entity.BaseTimeEntity;
@@ -22,15 +21,14 @@ public class FeedbackTemplate extends BaseTimeEntity {
     @JoinColumn(name="task_id")
     private Task task;
 
-    @Column(unique = true)
-    private int templateId;
+    private int templateKey;
 
     private int count;
 
     public static FeedbackTemplate from(Task task, Integer templateId) {
         FeedbackTemplate feedbackTemplate = new FeedbackTemplate();
         feedbackTemplate.task = task;
-        feedbackTemplate.templateId = templateId;
+        feedbackTemplate.templateKey = templateId;
 
         return feedbackTemplate;
     }

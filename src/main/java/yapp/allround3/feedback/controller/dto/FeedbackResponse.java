@@ -32,7 +32,7 @@ public class FeedbackResponse {
 			.toList();
 
 		feedbacks.stream()
-			.map(Feedback::getFeedbackEvaluation)
+			.map(Feedback::getEvaluation)
 			.forEach(evaluation -> {
 				String evaluationName = evaluation.name();
 				Integer count = feedbackResponse.evaluations.get(evaluationName);

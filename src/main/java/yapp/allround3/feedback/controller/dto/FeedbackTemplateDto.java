@@ -11,7 +11,7 @@ public class FeedbackTemplateDto implements Comparable<FeedbackTemplateDto> {
 	public static FeedbackTemplateDto from(FeedbackTemplate feedbackTemplate) {
 		FeedbackTemplateDto feedbackTemplateDto = new FeedbackTemplateDto();
 
-		feedbackTemplateDto.templateId = feedbackTemplate.getTemplateId();
+		feedbackTemplateDto.templateId = feedbackTemplate.getTemplateKey();
 		feedbackTemplateDto.count = feedbackTemplate.getCount();
 
 		return feedbackTemplateDto;

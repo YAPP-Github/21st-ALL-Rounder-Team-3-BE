@@ -80,6 +80,9 @@ public class Task extends BaseTimeEntity {
         this.feedbackRequestedDate = feedbackRequestedDate;
     }
 
+    public void addFeedbackRequiredPersonnel(){
+        this.feedbackRequiredPersonnel += 1;
+    }
     @Override
     public String toString() {
         return "Task{" +

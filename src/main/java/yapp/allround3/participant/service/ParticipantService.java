@@ -75,7 +75,10 @@ public class ParticipantService {
 
         Participant savedParticipant = participantRepository.save(participant);
         taskRepository.findTasksByProjectId(projectId)
-				.forEach(task -> taskRepository.updateTaskFeedbackRequiredPersonnel(task.getId()));
+				.forEach(task -> {
+                    task.addFeedbackRequiredPersonnel();
+                    taskRepository.save(task);
+                });
         return savedParticipant;
     }
 

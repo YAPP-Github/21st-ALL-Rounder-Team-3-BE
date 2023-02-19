@@ -41,16 +41,20 @@ public class Project extends BaseTimeEntity {
 	private int participantCount;
 
 	@Builder
-	private Project(String name, LocalDate startDate, LocalDate dueDate,String goal, Difficulty difficulty,ProjectStatus projectStatus,
-					int participantCount, ProjectImage projectImage) {
+	private Project(String name,
+		LocalDate startDate,
+		LocalDate dueDate,
+		String goal,
+		Difficulty difficulty,
+		ProjectStatus projectStatus,
+		ProjectImage projectImage
+	) {
 		this.name = name;
 		this.startDate = startDate;
 		this.dueDate = dueDate;
 		this.goal = goal;
 		this.difficulty = difficulty;
 		this.projectStatus= projectStatus;
-		this.participantCount = participantCount;
-		this.projectImage = projectImage;
 	}
 
 
@@ -68,13 +72,5 @@ public class Project extends BaseTimeEntity {
 
 	public void updateGoal(String goal) {
 		this.goal = goal;
-	}
-
-	public void updateDifficulty(Difficulty difficulty) {
-		this.difficulty = difficulty;
-	}
-
-	public void updateProjectStatus(ProjectStatus projectStatus) {
-		this.projectStatus = projectStatus;
 	}
 }

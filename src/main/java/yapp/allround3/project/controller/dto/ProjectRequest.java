@@ -16,6 +16,4 @@ public class ProjectRequest {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dueDate;
     private String goal;
-    private Difficulty difficulty;
-	private ProjectStatus projectStatus;
 }

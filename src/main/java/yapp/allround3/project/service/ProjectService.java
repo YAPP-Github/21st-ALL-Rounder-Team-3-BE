@@ -65,8 +65,6 @@ public class ProjectService {
     @Transactional
     public void updateProject(Long projectId, ProjectRequest projectRequest) {
         Project project = findProjectById(projectId);
-        project.updateProjectStatus(projectRequest.getProjectStatus());
-        project.updateDifficulty(projectRequest.getDifficulty());
         project.updateDueDate(projectRequest.getDueDate());
         project.updateStartDate(projectRequest.getStartDate());
         project.updateGoal(projectRequest.getGoal());

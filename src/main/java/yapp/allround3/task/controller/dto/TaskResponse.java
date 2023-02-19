@@ -1,5 +1,6 @@
 package yapp.allround3.task.controller.dto;
 
+import jakarta.annotation.Nullable;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import yapp.allround3.participant.domain.Participant;
@@ -23,11 +24,11 @@ public class TaskResponse {
         private TaskStatus taskStatus;
         private LocalDate feedbackDueDate;
         private int confirmCount;
-        private int participantCount;
+        private int feedbackRequiredPersonnel;
 
         private List<TaskContentInfo> taskContents;
 
-        public static TaskInfo of(Task task, Participant participant, int participantCount, List<TaskContent> taskContents) {
+        public static TaskInfo of(Task task, Participant participant, List<TaskContent> taskContents) {
             TaskInfo taskInfo = new TaskInfo();
             MemberInfo representative = MemberInfo.of(participant);
 
@@ -39,7 +40,7 @@ public class TaskResponse {
             taskInfo.setDueDate(task.getDueDate());
             taskInfo.setTaskStatus(task.getStatus());
             taskInfo.setConfirmCount(task.getConfirmCount());
-            taskInfo.setParticipantCount(participantCount);
+            taskInfo.setFeedbackRequiredPersonnel(task.getFeedbackRequiredPersonnel());
             taskInfo.setFeedbackDueDate(task.getFeedbackRequestedDate());
 
             List<TaskContentInfo> taskContentInfos = taskContents.stream().map(TaskContentInfo::of).toList();

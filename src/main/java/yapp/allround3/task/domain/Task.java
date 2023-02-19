@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Formula;
 import yapp.allround3.common.entity.BaseTimeEntity;
 import yapp.allround3.participant.domain.Participant;
-import yapp.allround3.project.domain.Project;
 
 import java.time.LocalDate;
 
@@ -40,19 +39,21 @@ public class Task extends BaseTimeEntity {
 
     private LocalDate feedbackRequestedDate;
 
+    private int feedbackRequiredPersonnel;
+
     @Formula("(SELECT count(*) FROM feedback f WHERE f.task_id= task_id)")
     private int confirmCount;
 
-
-
     @Builder
-    public Task(Participant participant, LocalDate startDate, LocalDate dueDate, String title, String memo, TaskStatus status) {
+    public Task(Participant participant, LocalDate startDate, LocalDate dueDate, String title, String memo, TaskStatus status,
+                int feedbackRequiredPersonnel) {
         this.participant = participant;
         this.startDate = startDate;
         this.dueDate = dueDate;
         this.title = title;
         this.memo = memo;
         this.status = status;
+        this.feedbackRequiredPersonnel = feedbackRequiredPersonnel;
     }
 
     public void updateTitle(String title) {
@@ -77,5 +78,20 @@ public class Task extends BaseTimeEntity {
 
     public void updateFeedbackRequestedDate(LocalDate feedbackRequestedDate){
         this.feedbackRequestedDate = feedbackRequestedDate;
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "id=" + id +
+                ", startDate=" + startDate +
+                ", dueDate=" + dueDate +
+                ", title='" + title + '\'' +
+                ", memo='" + memo + '\'' +
+                ", status=" + status +
+                ", feedbackRequestedDate=" + feedbackRequestedDate +
+                ", feedbackRequiredPersonnel=" + feedbackRequiredPersonnel +
+                ", confirmCount=" + confirmCount +
+                '}';
     }
 }

@@ -47,6 +47,11 @@ public class FeedbackService {
 			throw new CustomException("자신의 업무는 피드백 할 수 없습니다.");
 		}
 
+		if (existFeedbackHistory(task, participant)) {
+			throw new CustomException("이미 피드백을 제출하였습니다.");
+		}
+
+
 		List<Integer> checklist = feedbackRequest.getChecklist();
 
 		for (Integer templateId : checklist) {
@@ -76,5 +81,10 @@ public class FeedbackService {
 		FeedbackResponse result = FeedbackResponse.of(templates, feedbacks);
 
 		return CustomResponse.success(result);
+	}
+
+	private boolean existFeedbackHistory(Task task, Participant participant) {
+		return feedbackRepository.findByTaskAndParticipant(task, participant)
+			.isPresent();
 	}
 }

@@ -27,9 +27,10 @@ public class FeedbackTemplate extends BaseTimeEntity {
 
     private int count;
 
-    public static FeedbackTemplate from(Task task) {
+    public static FeedbackTemplate from(Task task, Integer templateId) {
         FeedbackTemplate feedbackTemplate = new FeedbackTemplate();
         feedbackTemplate.task = task;
+        feedbackTemplate.templateId = templateId;
 
         return feedbackTemplate;
     }

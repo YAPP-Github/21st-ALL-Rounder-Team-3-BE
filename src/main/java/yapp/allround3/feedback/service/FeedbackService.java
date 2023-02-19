@@ -51,17 +51,8 @@ public class FeedbackService {
 			throw new CustomException("이미 피드백을 제출하였습니다.");
 		}
 
-
 		List<Integer> checklist = feedbackRequest.getChecklist();
-
-		for (Integer templateId : checklist) {
-			FeedbackTemplate feedbackTemplate = feedbackTemplateRepository
-				.findByTaskAndTemplateId(task, templateId)
-				.orElseGet(() -> FeedbackTemplate.from(task));
-
-			feedbackTemplate.addCount();
-			feedbackTemplateRepository.save(feedbackTemplate);
-		}
+		checklist.forEach(templateId -> saveFeedbackTemplate(task, templateId));
 
 		Feedback feedback = Feedback.builder()
 			.task(task)
@@ -86,5 +77,14 @@ public class FeedbackService {
 	private boolean existFeedbackHistory(Task task, Participant participant) {
 		return feedbackRepository.findByTaskAndParticipant(task, participant)
 			.isPresent();
+	}
+
+	private void saveFeedbackTemplate(Task task, Integer templateId) {
+		FeedbackTemplate feedbackTemplate = feedbackTemplateRepository
+			.findByTaskAndTemplateId(task, templateId)
+			.orElseGet(() -> FeedbackTemplate.from(task, templateId));
+
+		feedbackTemplate.addCount();
+		feedbackTemplateRepository.save(feedbackTemplate);
 	}
 }

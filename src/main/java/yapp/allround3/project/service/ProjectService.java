@@ -14,6 +14,7 @@ import yapp.allround3.member.service.MemberService;
 import yapp.allround3.participant.domain.Participant;
 import yapp.allround3.participant.repository.ParticipantRepository;
 import yapp.allround3.project.controller.dto.ProjectRequest;
+import yapp.allround3.project.controller.dto.ProjectUpdateRequest;
 import yapp.allround3.project.domain.Project;
 import yapp.allround3.project.repository.ProjectRepository;
 
@@ -63,12 +64,12 @@ public class ProjectService {
     }
 
     @Transactional
-    public void updateProject(Long projectId, ProjectRequest projectRequest) {
+    public void updateProject(Long projectId, ProjectUpdateRequest projectUpdateRequest) {
         Project project = findProjectById(projectId);
-        project.updateDueDate(projectRequest.getDueDate());
-        project.updateStartDate(projectRequest.getStartDate());
-        project.updateGoal(projectRequest.getGoal());
-        project.updateName(projectRequest.getName());
+        project.updateDueDate(projectUpdateRequest.getDueDate());
+        project.updateStartDate(projectUpdateRequest.getStartDate());
+        project.updateGoal(projectUpdateRequest.getGoal());
+        project.updateName(projectUpdateRequest.getName());
         log.info(project.toString());
         projectRepository.save(project);
     }

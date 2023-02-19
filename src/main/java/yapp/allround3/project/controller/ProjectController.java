@@ -13,6 +13,7 @@ import yapp.allround3.participant.service.ParticipantService;
 import yapp.allround3.project.controller.dto.ProjectCreateResponse;
 import yapp.allround3.project.controller.dto.ProjectRequest;
 import yapp.allround3.project.controller.dto.ProjectResponse;
+import yapp.allround3.project.controller.dto.ProjectUpdateRequest;
 import yapp.allround3.project.domain.Project;
 import yapp.allround3.project.domain.ProjectImage;
 import yapp.allround3.project.service.ProjectService;
@@ -59,10 +60,10 @@ public class ProjectController {
     @ResponseBody
     @PutMapping("/projects/{projectId}")
     public CustomResponse<String> updateProject(
-            @RequestBody ProjectRequest projectRequest,
+            @RequestBody ProjectUpdateRequest projectUpdateRequest,
             @PathVariable Long projectId) {
 
-        projectService.updateProject(projectId, projectRequest);
+        projectService.updateProject(projectId, projectUpdateRequest);
         return CustomResponse.success("project update success");
     }
 

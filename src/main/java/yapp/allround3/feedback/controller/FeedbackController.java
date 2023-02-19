@@ -1,7 +1,5 @@
 package yapp.allround3.feedback.controller;
 
-import java.util.List;
-
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,6 +21,7 @@ public class FeedbackController {
 	public void addFeedback(
 		@PathVariable Long taskId,
 		HttpServletRequest request,
+		@RequestBody
 		FeedbackRequest feedbackRequest
 	) {
 		Long memberId = (Long)request.getAttribute("memberId");

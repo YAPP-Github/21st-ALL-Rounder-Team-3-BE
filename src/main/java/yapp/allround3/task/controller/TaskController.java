@@ -1,6 +1,7 @@
 package yapp.allround3.task.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import yapp.allround3.common.dto.CustomResponse;
 import yapp.allround3.common.interceptor.NoAuth;
@@ -17,6 +18,7 @@ import yapp.allround3.task.service.TaskService;
 import java.time.LocalDate;
 import java.util.List;
 
+@Slf4j
 @RestController
 @CrossOrigin(origins = "*")
 @RequiredArgsConstructor
@@ -33,9 +35,8 @@ public class TaskController {
 
         Task task = taskService.findTaskById(taskId);
         Participant participant = participantService.findParticipantById(task.getParticipant().getId());
-        int participantCount = participantService.findParticipantCountByProject(participant.getProject()) - 1; //자기 자신 제외
         List<TaskContent> taskContents = taskService.findTaskContentsByTask(task);
-        TaskResponse.TaskInfo taskInfo = TaskResponse.TaskInfo.of(task, participant, participantCount, taskContents);
+        TaskResponse.TaskInfo taskInfo = TaskResponse.TaskInfo.of(task, participant, taskContents);
         return CustomResponse.success(taskInfo);
     }
 
@@ -48,6 +49,7 @@ public class TaskController {
                 .dueDate(taskCreateRequest.getDueDate())
                 .startDate(taskCreateRequest.getStartDate())
                 .memo(taskCreateRequest.getMemo())
+                .feedbackRequiredPersonnel(participantService.findParticipantCountByProjectId(projectId)-1)
                 .status(taskCreateRequest.getTaskStatus()))
                 .participant(participant)
                 .build();
@@ -106,13 +108,12 @@ public class TaskController {
             @RequestParam(name = "participant-id") Long participantId
     ) {
         Project project = projectService.findProjectById(projectId);
-        int participantCount = projectService.findParticipantCountByProject(project);
         Participant representative = participantService.findParticipantById(participantId);
 
         List<Task> tasks = taskService.findTaskByParticipant(representative);
         List<TaskResponse.TaskInfo> taskInfos = tasks.stream()
                 .map(task ->
-                        TaskResponse.TaskInfo.of(task, representative, participantCount, taskService.findTaskContentsByTask(task)))
+                        TaskResponse.TaskInfo.of(task, representative, taskService.findTaskContentsByTask(task)))
                 .toList();
         return CustomResponse.success(taskInfos);
     }

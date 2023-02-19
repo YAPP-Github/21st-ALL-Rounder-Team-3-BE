@@ -2,7 +2,6 @@ package yapp.allround3.task.controller.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 import yapp.allround3.participant.domain.Participant;
 import yapp.allround3.task.domain.Task;
 import yapp.allround3.task.domain.TaskContent;
@@ -22,7 +21,7 @@ public class TaskResponse {
         private LocalDate dueDate;
         private String memo;
         private TaskStatus taskStatus;
-        private LocalDate feedbackRequestedDate;
+        private LocalDate feedbackDueDate;
         private int confirmCount;
         private int participantCount;
 
@@ -41,7 +40,7 @@ public class TaskResponse {
             taskInfo.setTaskStatus(task.getStatus());
             taskInfo.setConfirmCount(task.getConfirmCount());
             taskInfo.setParticipantCount(participantCount);
-            taskInfo.setFeedbackRequestedDate(task.getFeedbackRequestedDate());
+            taskInfo.setFeedbackDueDate(task.getFeedbackRequestedDate());
 
             List<TaskContentInfo> taskContentInfos = taskContents.stream().map(TaskContentInfo::of).toList();
             taskInfo.setTaskContents(taskContentInfos);

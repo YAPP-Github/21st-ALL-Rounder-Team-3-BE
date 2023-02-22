@@ -105,8 +105,12 @@ public class TaskController {
     @GetMapping("/projects/{projectId}/tasks")
     public CustomResponse<List<TaskResponse.TaskInfo>> findTasksByProject(
             @PathVariable Long projectId,
-            @RequestParam(name = "participant-id") Long participantId
+            @RequestParam(name = "participant-id",required = false) Long participantId
     ) {
+        if(participantId==null){
+            List<TaskResponse.TaskInfo> taskResponses = taskService.getTasksByProject(projectId);
+            return CustomResponse.success(taskResponses);
+        }
         Project project = projectService.findProjectById(projectId);
         Participant representative = participantService.findParticipantById(participantId);
 

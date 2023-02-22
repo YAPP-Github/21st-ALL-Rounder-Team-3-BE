@@ -9,6 +9,7 @@ import yapp.allround3.member.domain.Member;
 import yapp.allround3.participant.domain.Participant;
 import yapp.allround3.project.domain.Project;
 import yapp.allround3.task.controller.dto.TaskContentRequest;
+import yapp.allround3.task.controller.dto.TaskResponse;
 import yapp.allround3.task.controller.dto.TaskUpdateRequest;
 import yapp.allround3.task.domain.Task;
 import yapp.allround3.task.domain.TaskContent;
@@ -85,5 +86,12 @@ public class TaskService {
         }
         task.updateTaskStatus(taskStatus);
         taskRepository.save(task);
+    }
+
+    public List<TaskResponse.TaskInfo> getTasksByProject(Long projectId) {
+        return taskRepository.findTasksByProjectId(projectId).stream()
+                .map(task ->
+                        TaskResponse.TaskInfo.of(task, task.getParticipant(), findTaskContentsByTask(task)))
+                .toList();
     }
 }

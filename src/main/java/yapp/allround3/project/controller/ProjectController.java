@@ -37,7 +37,6 @@ public class ProjectController {
             HttpServletRequest request
     ) {
         ProjectImage projectImage = ProjectImage.randomProjectThumbnail();
-
         Project project = Project.builder().
                 name(projectRequest.getName()).
                 startDate(projectRequest.getStartDate()).

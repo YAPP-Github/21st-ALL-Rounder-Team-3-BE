@@ -55,6 +55,7 @@ public class Project extends BaseTimeEntity {
 		this.goal = goal;
 		this.difficulty = difficulty;
 		this.projectStatus= projectStatus;
+		this.projectImage = projectImage;
 	}
 
 

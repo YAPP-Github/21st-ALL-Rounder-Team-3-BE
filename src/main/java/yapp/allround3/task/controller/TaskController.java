@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import yapp.allround3.common.dto.CustomResponse;
 import yapp.allround3.common.interceptor.NoAuth;
+import yapp.allround3.feedback.domain.Feedback;
+import yapp.allround3.feedback.repository.FeedbackRepository;
 import yapp.allround3.participant.domain.Participant;
 import yapp.allround3.participant.service.ParticipantService;
 import yapp.allround3.project.domain.Project;
@@ -12,11 +14,10 @@ import yapp.allround3.project.service.ProjectService;
 import yapp.allround3.task.controller.dto.*;
 import yapp.allround3.task.domain.Task;
 import yapp.allround3.task.domain.TaskContent;
-import yapp.allround3.task.domain.TaskStatus;
 import yapp.allround3.task.service.TaskService;
 
-import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -27,16 +28,25 @@ public class TaskController {
     private final ProjectService projectService;
     private final TaskService taskService;
     private final ParticipantService participantService;
+    private final FeedbackRepository feedbackRepository;
 
 
     @GetMapping("/tasks/{taskId}")
     public CustomResponse<TaskResponse.TaskInfo> findTaskById(
-            @PathVariable Long taskId) {
-
+        @PathVariable Long taskId
+    ) {
         Task task = taskService.findTaskById(taskId);
         Participant participant = participantService.findParticipantById(task.getParticipant().getId());
         List<TaskContent> taskContents = taskService.findTaskContentsByTask(task);
-        TaskResponse.TaskInfo taskInfo = TaskResponse.TaskInfo.of(task, participant, taskContents);
+
+        // 피드백 수행 여부 확인
+        Optional<Feedback> optionalFeedback = feedbackRepository.findByTaskAndParticipant(task, participant);
+        FeedbackStatus feedbackStatus = FeedbackStatus.PENDING;
+        if (optionalFeedback.isPresent()) {
+            feedbackStatus = FeedbackStatus.FINISHED;
+        }
+
+        TaskResponse.TaskInfo taskInfo = TaskResponse.TaskInfo.of(task, participant, taskContents, feedbackStatus);
         return CustomResponse.success(taskInfo);
     }
 
@@ -117,7 +127,13 @@ public class TaskController {
         List<Task> tasks = taskService.findTaskByParticipant(representative);
         List<TaskResponse.TaskInfo> taskInfos = tasks.stream()
                 .map(task ->
-                        TaskResponse.TaskInfo.of(task, representative, taskService.findTaskContentsByTask(task)))
+                        TaskResponse.TaskInfo.of(
+                            task,
+                            representative,
+                            taskService.findTaskContentsByTask(task),
+                            FeedbackStatus.NONE
+                        )
+                )
                 .toList();
         return CustomResponse.success(taskInfos);
     }

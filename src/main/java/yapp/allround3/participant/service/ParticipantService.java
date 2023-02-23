@@ -11,13 +11,13 @@ import yapp.allround3.member.domain.Member;
 import yapp.allround3.member.service.MemberService;
 import yapp.allround3.participant.controller.dto.ParticipantFeedbackResponse;
 import yapp.allround3.participant.domain.Participant;
+import yapp.allround3.participant.domain.ParticipantStatus;
 import yapp.allround3.participant.repository.ParticipantRepository;
 import yapp.allround3.project.domain.Project;
 import yapp.allround3.project.service.ProjectService;
 import yapp.allround3.task.domain.Task;
 import yapp.allround3.task.repository.TaskRepository;
 import java.util.List;
-
 
 @Service
 @RequiredArgsConstructor
@@ -47,39 +47,32 @@ public class ParticipantService {
                 .orElseThrow(()->new CustomException("해당 task의 참여자가 아닙니다."));
     }
 
-    public int findParticipantCountByProject(Project project) {
-
-        return participantRepository.countParticipantByProject(project);
-    }
-
     public int findParticipantCountByProjectId(Long projectId) {
 
         return participantRepository.countParticipantByProjectId(projectId);
     }
 
-    public List<Participant> findParticipantsGivenFeedback(Task task) {
-
-        return participantRepository.findParticipantsGivenFeedback(task);
-    }
-
     @Transactional
-    public Participant joinProject(Long projectId, Long memberId) {
+    public void joinProject(Long projectId, Long memberId) {
         Member member = memberService.findMemberById(memberId);
         Project project = projectService.findProjectById(projectId);
 
-        Participant participant = Participant.from(project, member);
+        Participant participant = participantRepository.findByMemberAndProject(member, project)
+            .orElseGet(() -> Participant.of(project, member));
 
-        if (isExistedParticipant(participant)) {
-            throw new CustomException("이미 가입되어 있는 멤버에요.");
+        if (participant.getParticipantStatus() == ParticipantStatus.NORMAL) {
+            throw new CustomException("이미 가입된 참여자에요");
         }
 
-        Participant savedParticipant = participantRepository.save(participant);
+        participant.joinProject();
+        participantRepository.save(participant);
+
         taskRepository.findTasksByProjectId(projectId)
-				.forEach(task -> {
+            .forEach(task -> {
                     task.addFeedbackRequiredPersonnel();
                     taskRepository.save(task);
-                });
-        return savedParticipant;
+                }
+            );
     }
 
     @Transactional
@@ -118,13 +111,5 @@ public class ParticipantService {
     public Participant findParticipantByProjectAndMember(Project project, Member member) {
         return participantRepository.findParticipantByProjectAndMember(project, member)
                 .orElseThrow(() -> new CustomException("프로젝트에 참여한 멤버가 아닙니다."));
-    }
-
-    private boolean isExistedParticipant(Participant participant) {
-        Member member = participant.getMember();
-        Project project = participant.getProject();
-
-        return participantRepository.findByMemberAndProject(member, project)
-                .isPresent();
     }
 }

@@ -25,9 +25,5 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
 	int countParticipantByProjectId(Long projectId);
 	Optional<Participant> findParticipantByProjectAndMember(Project project,Member member);
 
-
-	@Query("select f.participant as p from Feedback f where f.task=:task")
-	List<Participant> findParticipantsGivenFeedback(Task task);
-
 	Optional<Participant> findByMemberAndProject(Member member, Project project);
 }

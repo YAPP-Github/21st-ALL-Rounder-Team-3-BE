@@ -76,5 +76,6 @@ public class ProjectService {
     public void deleteProject(Project project) {
         participantRepository.findByProjectAndParticipantStatus(project, ParticipantStatus.NORMAL)
             .forEach(Participant::withdraw);
+        project.delete();
     }
 }

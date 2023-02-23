@@ -37,9 +37,6 @@ public class Project extends BaseTimeEntity {
 	@Enumerated(value = EnumType.STRING)
 	private ProjectImage projectImage;
 
-	@Formula("(SELECT count(*) FROM participant p where p.participant_id=project_id)")
-	private int participantCount;
-
 	@Builder
 	private Project(String name,
 		LocalDate startDate,
@@ -73,5 +70,9 @@ public class Project extends BaseTimeEntity {
 
 	public void updateGoal(String goal) {
 		this.goal = goal;
+	}
+
+	public void delete() {
+		projectStatus = ProjectStatus.DELETED;
 	}
 }

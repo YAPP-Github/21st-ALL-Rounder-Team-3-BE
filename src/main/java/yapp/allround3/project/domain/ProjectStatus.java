@@ -5,5 +5,6 @@ public enum ProjectStatus {
     IN_PROGRESS,
     FEEDBACK_REQUIRED,
     FEEDBACK_DONE,
-    COMPLETED
+    COMPLETED,
+    DELETED
 }

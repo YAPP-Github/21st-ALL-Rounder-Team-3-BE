@@ -24,8 +24,8 @@ public class SessionService {
 	}
 
 	@Transactional
-	public void logout(Member member) {
-		sessionRepository.deleteAllByMember(member);
+	public void logout(Long memberId) {
+		sessionRepository.deleteAllByMemberId(memberId);
 	}
 
 	public Session findByAppTokenUuid(String appTokenUuid) {

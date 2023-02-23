@@ -45,26 +45,13 @@ public class MemberController {
 		memberService.updateMember(memberUpdateRequest);
 	}
 
-	@PostMapping("")
-	public void logout(
-		HttpServletRequest request
-	) {
-		Long memberId = (Long)request.getAttribute("memberId");
-		logoutMember(memberId);
-	}
-
 	@DeleteMapping("")
 	public void withdraw(
 		HttpServletRequest request
 	) {
 		Long memberId = (Long)request.getAttribute("memberId");
-		memberService.withdraw(memberId);
+		sessionService.logout(memberId);
 		participantService.withdrawAllProjects(memberId);
-		logoutMember(memberId);
-	}
-
-	private void logoutMember(Long memberId) {
-		Member member = memberService.findMemberById(memberId);
-		sessionService.logout(member);
+		memberService.withdraw(memberId);
 	}
 }

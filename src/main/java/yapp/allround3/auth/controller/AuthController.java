@@ -16,6 +16,8 @@ import yapp.allround3.auth.jwt.dto.AuthRefreshResponse;
 import yapp.allround3.auth.jwt.service.JwtService;
 import yapp.allround3.common.dto.CustomResponse;
 import yapp.allround3.common.interceptor.NoAuth;
+import yapp.allround3.member.domain.Member;
+import yapp.allround3.session.service.SessionService;
 
 @Controller
 @RequiredArgsConstructor
@@ -26,6 +28,7 @@ import yapp.allround3.common.interceptor.NoAuth;
 public class AuthController {
 
 	private final JwtService jwtService;
+	private final SessionService sessionService;
 
 	@PostMapping("refresh")
 	@ResponseStatus(HttpStatus.CREATED)
@@ -36,5 +39,13 @@ public class AuthController {
 		AuthRefreshResponse authRefreshResponse = jwtService.refreshToken(appToken, refreshToken);
 
 		return CustomResponse.success(authRefreshResponse);
+	}
+
+	@PostMapping("logout")
+	public void logout(
+		HttpServletRequest request
+	) {
+		Long memberId = (Long)request.getAttribute("memberId");
+		sessionService.logout(memberId);
 	}
 }

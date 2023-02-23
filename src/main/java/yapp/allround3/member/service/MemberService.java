@@ -5,14 +5,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import yapp.allround3.common.exception.CustomException;
-import yapp.allround3.member.controller.dto.MemberResponse;
 import yapp.allround3.auth.oauth.Provider;
 import yapp.allround3.member.controller.dto.MemberUpdateRequest;
 import yapp.allround3.member.domain.Member;
 import yapp.allround3.member.repository.MemberRepository;
 import yapp.allround3.participant.domain.Participant;
 import yapp.allround3.participant.repository.ParticipantRepository;
-import yapp.allround3.project.domain.Project;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -44,14 +43,6 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
-    public List<Member> findMembersParticipatingInProject(Project project){
-        return participantRepository.
-                findParticipantsByProject(project).
-                stream().
-                map(Participant::getMember).
-                toList();
-    }
-
     @Transactional
     public void updateMember(MemberUpdateRequest memberUpdateRequest) {
         Member member = memberRepository.findById(memberUpdateRequest.getMemberId())
@@ -59,5 +50,14 @@ public class MemberService {
 
         member.update(memberUpdateRequest);
         memberRepository.save(member);
+    }
+
+    @Transactional
+    public void withdraw(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+            .orElseThrow(() -> new CustomException("해당 멤버가 존재하지 않습니다."));
+        member.withdraw();
+        participantRepository.findByMember(member)
+            .forEach(Participant::withdrawProject);
     }
 }

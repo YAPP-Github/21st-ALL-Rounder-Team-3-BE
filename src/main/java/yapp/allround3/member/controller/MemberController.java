@@ -40,4 +40,12 @@ public class MemberController {
 		memberUpdateRequest.setMemberId(memberId);
 		memberService.updateMember(memberUpdateRequest);
 	}
+
+	@DeleteMapping("")
+	public void withdraw(
+		HttpServletRequest request
+	) {
+		Long memberId = (Long)request.getAttribute("memberId");
+		memberService.withdraw(memberId);
+	}
 }

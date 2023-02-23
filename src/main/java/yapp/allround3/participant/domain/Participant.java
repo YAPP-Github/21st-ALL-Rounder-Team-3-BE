@@ -57,6 +57,10 @@ public class Participant extends BaseTimeEntity {
         this.leader = false;
     }
 
+    public void withdrawProject() {
+        this.member = null;
+    }
+
     @Override
     public String toString() {
         return "Participant{" +

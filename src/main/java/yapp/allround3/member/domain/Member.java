@@ -37,6 +37,9 @@ public class Member extends BaseTimeEntity {
 
 	private String introduction;
 
+	@Enumerated(EnumType.STRING)
+	private MemberStatus memberStatus = MemberStatus.NORMAL;
+
 	@Builder
 	public Member(String name, String email, String imageUrl, Provider provider, String oauthId) {
 		this.name = name;
@@ -50,5 +53,15 @@ public class Member extends BaseTimeEntity {
 		this.name = memberUpdateRequest.getNickname();
 		this.imageUrl = memberUpdateRequest.getImageUrl();
 		this.introduction = memberUpdateRequest.getIntroduction();
+	}
+
+	public void withdraw() {
+		this.name = null;
+		this.email = null;
+		this.imageUrl = null;
+		this.provider = null;
+		oauthId = null;
+		introduction = null;
+		memberStatus = MemberStatus.WITHDRAWAL;
 	}
 }

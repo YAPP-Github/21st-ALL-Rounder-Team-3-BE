@@ -121,6 +121,9 @@ public class ParticipantService {
             if (participants.size() > 0) {
                 participant.changeLeader(participants.get(0));
             }
+            else {
+                participant.getProject().delete();
+            }
         }
 
         // 피드백 필요 인원 감축

@@ -18,5 +18,4 @@ public class TaskUpdateRequest {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dueDate;
     private String memo;
-    private TaskStatus taskStatus;
 }

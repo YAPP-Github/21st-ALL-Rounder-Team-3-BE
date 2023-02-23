@@ -17,8 +17,8 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     @Modifying
     @Query("update Task t set t.feedbackRequiredPersonnel=t.feedbackRequiredPersonnel+1 where t.id = :taskId")
-    void updateTaskFeedbackRequiredPersonnel(Long taskId);
+    void updateTaskFeedbackRequiredPersonnel(@Param("taskId") Long taskId);
 
     @Query("select t from Task t where t.participant.project.id = :projectId")
-    List<Task> findTasksByProjectId(Long projectId);
+    List<Task> findTasksByProjectId(@Param("projectId") Long projectId);
 }

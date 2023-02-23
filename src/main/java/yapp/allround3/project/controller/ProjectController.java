@@ -6,9 +6,11 @@ import org.springframework.web.bind.annotation.*;
 
 import lombok.RequiredArgsConstructor;
 import yapp.allround3.common.dto.CustomResponse;
+import yapp.allround3.common.exception.CustomException;
 import yapp.allround3.member.domain.Member;
 import yapp.allround3.member.service.MemberService;
 import yapp.allround3.participant.controller.dto.ParticipantDto;
+import yapp.allround3.participant.domain.Participant;
 import yapp.allround3.participant.service.ParticipantService;
 import yapp.allround3.project.controller.dto.ProjectCreateResponse;
 import yapp.allround3.project.controller.dto.ProjectRequest;
@@ -108,5 +110,19 @@ public class ProjectController {
         return CustomResponse.success(response);
     }
 
+    @ResponseBody
+    @DeleteMapping("/projects/{projectId}")
+    public void deleteProject(
+        @PathVariable Long projectId,
+        HttpServletRequest request
+    ) {
+        Long memberId = (Long) request.getAttribute("memberId");
 
+        Participant participant = participantService.findParticipantByProjectAndMember(projectId, memberId);
+        if (!participant.isLeader()) {
+            throw new CustomException("프로젝트 삭제는 팀장만 가능해요.");
+        }
+
+        projectService.deleteProject(participant.getProject());
+    }
 }

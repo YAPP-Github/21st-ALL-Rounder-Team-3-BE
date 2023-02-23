@@ -71,7 +71,6 @@ public class TaskService {
     @Transactional
     public void updateTask(TaskUpdateRequest taskUpdateRequest) {
         Task task = findTaskById(taskUpdateRequest.getTaskId());
-        task.updateTaskStatus(taskUpdateRequest.getTaskStatus());
         task.updateDueDate(taskUpdateRequest.getDueDate());
         task.updateMemo(taskUpdateRequest.getMemo());
         task.updateTitle(taskUpdateRequest.getTitle());

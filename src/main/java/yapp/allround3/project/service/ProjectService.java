@@ -12,8 +12,8 @@ import yapp.allround3.common.exception.CustomException;
 import yapp.allround3.member.domain.Member;
 import yapp.allround3.member.service.MemberService;
 import yapp.allround3.participant.domain.Participant;
+import yapp.allround3.participant.domain.ParticipantStatus;
 import yapp.allround3.participant.repository.ParticipantRepository;
-import yapp.allround3.project.controller.dto.ProjectRequest;
 import yapp.allround3.project.controller.dto.ProjectUpdateRequest;
 import yapp.allround3.project.domain.Project;
 import yapp.allround3.project.repository.ProjectRepository;
@@ -40,7 +40,9 @@ public class ProjectService {
     }
 
     public List<Project> findProjectByMember(Member member) {
-        List<Participant> participants = participantRepository.findByMember(member);
+        List<Participant> participants = participantRepository.findByMemberAndParticipantStatus(
+            member, ParticipantStatus.NORMAL
+        );
 
         return participants.stream()
                 .map(Participant::getProject)
@@ -53,14 +55,10 @@ public class ProjectService {
     }
 
     public Long findMyParticipantId(Member member, Project project) {
-        if(participantRepository.findParticipantByProjectAndMember(project, member).isEmpty()){
+        if(participantRepository.findByProjectAndMember(project, member).isEmpty()){
             return null;
         }
-        return participantRepository.findParticipantByProjectAndMember(project, member).orElseThrow().getId();
-    }
-
-    public int findParticipantCountByProject(Project project) {
-        return participantRepository.countParticipantByProject(project);
+        return participantRepository.findByProjectAndMember(project, member).orElseThrow().getId();
     }
 
     @Transactional
@@ -72,5 +70,11 @@ public class ProjectService {
         project.updateName(projectUpdateRequest.getName());
         log.info(project.toString());
         projectRepository.save(project);
+    }
+
+    @Transactional
+    public void deleteProject(Project project) {
+        participantRepository.findByProjectAndParticipantStatus(project, ParticipantStatus.NORMAL)
+            .forEach(Participant::withdraw);
     }
 }

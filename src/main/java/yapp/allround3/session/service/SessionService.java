@@ -19,8 +19,13 @@ public class SessionService {
 	private final SessionRepository sessionRepository;
 
 	@Transactional
-	public Session save(Session session) {
-		return sessionRepository.save(session);
+	public void save(Session session) {
+		sessionRepository.save(session);
+	}
+
+	@Transactional
+	public void logout(Member member) {
+		sessionRepository.deleteAllByMember(member);
 	}
 
 	public Session findByAppTokenUuid(String appTokenUuid) {

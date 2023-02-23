@@ -9,6 +9,8 @@ import yapp.allround3.member.controller.dto.MemberResponse;
 import yapp.allround3.member.controller.dto.MemberUpdateRequest;
 import yapp.allround3.member.domain.Member;
 import yapp.allround3.member.service.MemberService;
+import yapp.allround3.participant.service.ParticipantService;
+import yapp.allround3.session.service.SessionService;
 
 @RestController
 @RequestMapping("/members")
@@ -16,6 +18,8 @@ import yapp.allround3.member.service.MemberService;
 @RequiredArgsConstructor
 public class MemberController {
 	private final MemberService memberService;
+	private final ParticipantService participantService;
+	private final SessionService sessionService;
 
 	@ResponseBody
 	@GetMapping("")
@@ -41,11 +45,26 @@ public class MemberController {
 		memberService.updateMember(memberUpdateRequest);
 	}
 
+	@PostMapping("")
+	public void logout(
+		HttpServletRequest request
+	) {
+		Long memberId = (Long)request.getAttribute("memberId");
+		logoutMember(memberId);
+	}
+
 	@DeleteMapping("")
 	public void withdraw(
 		HttpServletRequest request
 	) {
 		Long memberId = (Long)request.getAttribute("memberId");
 		memberService.withdraw(memberId);
+		participantService.withdrawAllProjects(memberId);
+		logoutMember(memberId);
+	}
+
+	private void logoutMember(Long memberId) {
+		Member member = memberService.findMemberById(memberId);
+		sessionService.logout(member);
 	}
 }

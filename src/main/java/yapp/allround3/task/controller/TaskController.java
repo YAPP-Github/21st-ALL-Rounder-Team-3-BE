@@ -9,7 +9,6 @@ import yapp.allround3.common.interceptor.NoAuth;
 import yapp.allround3.feedback.domain.Feedback;
 import yapp.allround3.feedback.repository.FeedbackRepository;
 import yapp.allround3.member.domain.Member;
-import yapp.allround3.member.repository.MemberRepository;
 import yapp.allround3.member.service.MemberService;
 import yapp.allround3.participant.domain.Participant;
 import yapp.allround3.participant.service.ParticipantService;
@@ -18,6 +17,7 @@ import yapp.allround3.project.service.ProjectService;
 import yapp.allround3.task.controller.dto.*;
 import yapp.allround3.task.domain.Task;
 import yapp.allround3.task.domain.TaskContent;
+import yapp.allround3.task.domain.TaskStatus;
 import yapp.allround3.task.service.TaskService;
 
 import java.util.List;
@@ -72,10 +72,10 @@ public class TaskController {
                 .startDate(taskCreateRequest.getStartDate())
                 .memo(taskCreateRequest.getMemo())
                 .feedbackRequiredPersonnel(participantService.findParticipantCountByProjectId(projectId)-1)
-                .status(taskCreateRequest.getTaskStatus()))
+                .status(TaskStatus.BEFORE)
                 .participant(participant)
-                .build();
-
+                .build()
+        );
 
         taskService.saveTask(task);
 

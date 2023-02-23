@@ -15,4 +15,6 @@ public interface SessionRepository extends JpaRepository<Session, Long> {
 	boolean existsByAppTokenUuidAndRefreshTokenUuid(String appTokenUuid, String refreshTokenUuid);
 
 	List<Session> findByMember(Member member);
+
+	void deleteAllByMember(Member member);
 }

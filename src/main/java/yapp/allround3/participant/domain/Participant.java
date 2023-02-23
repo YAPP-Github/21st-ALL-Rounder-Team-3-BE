@@ -71,6 +71,10 @@ public class Participant extends BaseTimeEntity {
         participantStatus = ParticipantStatus.NORMAL;
     }
 
+    public void drop() {
+        participantStatus = ParticipantStatus.DROPPED;
+    }
+
     @Override
     public String toString() {
         return "Participant{" +

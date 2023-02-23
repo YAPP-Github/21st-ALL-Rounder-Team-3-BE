@@ -93,6 +93,6 @@ public class ParticipantController {
 			throw new CustomException("팀원 내보내기는 팀장만 가능해요.");
 		}
 
-		participantService.withdrawProject(participantId);
+		participantService.dropProject(participantId);
 	}
 }

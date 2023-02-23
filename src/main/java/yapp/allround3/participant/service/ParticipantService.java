@@ -99,6 +99,10 @@ public class ParticipantService {
             throw new CustomException("이미 가입된 참여자에요");
         }
 
+        if (participant.getParticipantStatus() == ParticipantStatus.DROPPED) {
+            throw new CustomException("퇴장 당한 프로젝트에 참여할 수 없어요.");
+        }
+
         participant.join();
 
         // 피드백 필요 인원 증가
@@ -125,6 +129,16 @@ public class ParticipantService {
                 participant.getProject().delete();
             }
         }
+
+        // 피드백 필요 인원 감축
+        taskRepository.findTasksByProjectId(participant.getProject().getId())
+            .forEach(Task::subtractFeedbackRequiredPersonnel);
+    }
+
+    @Transactional
+    public void dropProject(Long participantId) {
+        Participant participant = findParticipantById(participantId);
+        participant.drop();
 
         // 피드백 필요 인원 감축
         taskRepository.findTasksByProjectId(participant.getProject().getId())

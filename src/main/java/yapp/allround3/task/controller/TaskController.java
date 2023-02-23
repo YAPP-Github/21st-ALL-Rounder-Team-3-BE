@@ -1,5 +1,6 @@
 package yapp.allround3.task.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -7,6 +8,9 @@ import yapp.allround3.common.dto.CustomResponse;
 import yapp.allround3.common.interceptor.NoAuth;
 import yapp.allround3.feedback.domain.Feedback;
 import yapp.allround3.feedback.repository.FeedbackRepository;
+import yapp.allround3.member.domain.Member;
+import yapp.allround3.member.repository.MemberRepository;
+import yapp.allround3.member.service.MemberService;
 import yapp.allround3.participant.domain.Participant;
 import yapp.allround3.participant.service.ParticipantService;
 import yapp.allround3.project.domain.Project;
@@ -29,10 +33,12 @@ public class TaskController {
     private final TaskService taskService;
     private final ParticipantService participantService;
     private final FeedbackRepository feedbackRepository;
+    private final MemberService memberService;
 
 
     @GetMapping("/tasks/{taskId}")
     public CustomResponse<TaskResponse.TaskInfo> findTaskById(
+        HttpServletRequest request,
         @PathVariable Long taskId
     ) {
         Task task = taskService.findTaskById(taskId);
@@ -40,7 +46,13 @@ public class TaskController {
         List<TaskContent> taskContents = taskService.findTaskContentsByTask(task);
 
         // 피드백 수행 여부 확인
-        Optional<Feedback> optionalFeedback = feedbackRepository.findByTaskAndParticipant(task, participant);
+        Long memberId = (Long)request.getAttribute("memberId");
+        Member member = memberService.findMemberById(memberId);
+        Participant RequestedParticipant = participantService.findParticipantByProjectAndMember(
+            participant.getProject(),
+            member
+        );
+        Optional<Feedback> optionalFeedback = feedbackRepository.findByTaskAndParticipant(task, RequestedParticipant);
         FeedbackStatus feedbackStatus = FeedbackStatus.PENDING;
         if (optionalFeedback.isPresent()) {
             feedbackStatus = FeedbackStatus.FINISHED;

@@ -62,21 +62,22 @@ public class Participant extends BaseTimeEntity {
         this.leader = false;
     }
 
-    public void withdrawProject() {
+    public void withdraw() {
         participantStatus = ParticipantStatus.WITHDRAWAL;
     }
 
-    public void joinProject() {
+    public void join() {
         participantStatus = ParticipantStatus.NORMAL;
     }
 
     @Override
     public String toString() {
         return "Participant{" +
-                "id=" + id +
-                ", project=" + project.getId() +
-                ", member=" + member.getId() +
-                ", leader=" + leader +
-                '}';
+            "id=" + id +
+            ", project=" + project.getId() +
+            ", member=" + member.getId() +
+            ", leader=" + leader +
+            ", status=" + participantStatus +
+            '}';
     }
 }

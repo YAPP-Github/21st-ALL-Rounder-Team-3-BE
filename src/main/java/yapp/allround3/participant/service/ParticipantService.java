@@ -64,15 +64,28 @@ public class ParticipantService {
             throw new CustomException("이미 가입된 참여자에요");
         }
 
-        participant.joinProject();
-        participantRepository.save(participant);
+        participant.join();
 
         taskRepository.findTasksByProjectId(projectId)
-            .forEach(task -> {
-                    task.addFeedbackRequiredPersonnel();
-                    taskRepository.save(task);
-                }
-            );
+            .forEach(Task::addFeedbackRequiredPersonnel);
+    }
+
+    @Transactional
+    public void withdrawProject(Long participantId) {
+        Participant participant = findParticipantById(participantId);
+
+        participant.withdraw();
+
+        taskRepository.findTasksByProjectId(participant.getProject().getId())
+            .forEach(Task::subtractFeedbackRequiredPersonnel);
+    }
+
+    @Transactional
+    public void withdrawAllProjects(Member member) {
+        List<Participant> participants = participantRepository.findByMember(member);
+        participants.stream()
+            .map(Participant::getId)
+            .forEach(this::withdrawProject);
     }
 
     @Transactional

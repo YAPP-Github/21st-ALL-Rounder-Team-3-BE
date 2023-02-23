@@ -83,6 +83,11 @@ public class Task extends BaseTimeEntity {
     public void addFeedbackRequiredPersonnel(){
         this.feedbackRequiredPersonnel += 1;
     }
+
+    public void subtractFeedbackRequiredPersonnel(){
+        this.feedbackRequiredPersonnel -= 1;
+    }
+
     @Override
     public String toString() {
         return "Task{" +

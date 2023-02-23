@@ -10,9 +10,8 @@ import yapp.allround3.member.controller.dto.MemberUpdateRequest;
 import yapp.allround3.member.domain.Member;
 import yapp.allround3.member.repository.MemberRepository;
 import yapp.allround3.participant.domain.Participant;
-import yapp.allround3.participant.repository.ParticipantRepository;
+import yapp.allround3.participant.service.ParticipantService;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,7 +19,8 @@ import java.util.Optional;
 @Transactional(readOnly=true)
 public class MemberService {
     private final MemberRepository memberRepository;
-    private final ParticipantRepository participantRepository;
+
+    private final ParticipantService participantService;
 
 
     public Member findMemberById(Long id){
@@ -57,7 +57,6 @@ public class MemberService {
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new CustomException("해당 멤버가 존재하지 않습니다."));
         member.withdraw();
-        participantRepository.findByMember(member)
-            .forEach(Participant::withdrawProject);
+        participantService.withdrawAllProjects(member);
     }
 }

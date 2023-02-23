@@ -13,6 +13,8 @@ import yapp.allround3.participant.controller.dto.ParticipantResponse;
 import yapp.allround3.participant.domain.Participant;
 import yapp.allround3.participant.domain.ParticipantStatus;
 import yapp.allround3.participant.service.ParticipantService;
+import yapp.allround3.project.domain.Project;
+import yapp.allround3.project.service.ProjectService;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -20,6 +22,7 @@ import yapp.allround3.participant.service.ParticipantService;
 public class ParticipantController {
 
 	private final ParticipantService participantService;
+	private final ProjectService projectService;
 
 	@PostMapping("/projects/{projectId}")
 	public void joinProject(
@@ -73,5 +76,23 @@ public class ParticipantController {
 		ParticipantFeedbackResponse result = participantService.findParticipantGroupByTask(taskId);
 
 		return CustomResponse.success(result);
+	}
+
+	@PostMapping("/participants/{participantId}/drop")
+	public void dropParticipant(
+		@PathVariable Long participantId,
+		HttpServletRequest request
+	) {
+		Long memberId = (Long)request.getAttribute("memberId");
+		Long projectId = participantService.findParticipantById(participantId)
+			.getProject()
+			.getId();
+
+		Participant leader = participantService.findParticipantByProjectAndMember(projectId, memberId);
+		if (!leader.isLeader()) {
+			throw new CustomException("팀원 내보내기는 팀장만 가능해요.");
+		}
+
+		participantService.withdrawProject(participantId);
 	}
 }

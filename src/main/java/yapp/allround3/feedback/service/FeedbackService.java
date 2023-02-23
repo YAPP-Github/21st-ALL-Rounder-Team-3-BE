@@ -57,7 +57,7 @@ public class FeedbackService {
 		Feedback feedback = Feedback.builder()
 			.task(task)
 			.contents(feedbackRequest.getDetail())
-			.evaluation(feedbackRequest.getFeedbackEvaluation())
+			.evaluation(feedbackRequest.getEvaluation())
 			.participant(participant)
 			.build();
 

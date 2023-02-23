@@ -43,6 +43,7 @@ public class Participant extends BaseTimeEntity {
     public static Participant initProject(Project project, Member member) {
         Participant participant = of(project, member);
         participant.leader = true;
+        participant.participantStatus = ParticipantStatus.NORMAL;
         return participant;
     }
 

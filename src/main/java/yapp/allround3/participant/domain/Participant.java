@@ -78,7 +78,7 @@ public class Participant extends BaseTimeEntity {
     @Override
     public String toString() {
         return "Participant{" +
-            "id=" + id +
+            "oauthId=" + id +
             ", project=" + project.getId() +
             ", member=" + member.getId() +
             ", leader=" + leader +

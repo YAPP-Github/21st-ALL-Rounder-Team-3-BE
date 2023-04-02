@@ -83,7 +83,7 @@ public class ProjectController {
                             .findParticipantsByProject(project).stream()
                             .map(ParticipantDto::of)
                             .toList();
-                    //추후 내 task 조회를 위해 나의 해당 프로젝트 참여자 id 필드 추가
+                    //추후 내 task 조회를 위해 나의 해당 프로젝트 참여자 oauthId 필드 추가
                     Long myParticipantId = projectService.findMyParticipantId(member, project);
                     return ProjectResponse.of(project, myParticipantId, participantDtos);
                 }).toList();

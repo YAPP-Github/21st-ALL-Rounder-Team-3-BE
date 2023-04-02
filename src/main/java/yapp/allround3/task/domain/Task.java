@@ -91,7 +91,7 @@ public class Task extends BaseTimeEntity {
     @Override
     public String toString() {
         return "Task{" +
-                "id=" + id +
+                "oauthId=" + id +
                 ", startDate=" + startDate +
                 ", dueDate=" + dueDate +
                 ", title='" + title + '\'' +

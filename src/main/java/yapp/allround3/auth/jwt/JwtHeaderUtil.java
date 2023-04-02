@@ -17,7 +17,7 @@ public class JwtHeaderUtil {
 			.orElseThrow(() -> new CustomException("The header does not contain code"));
 	}
 
-	public static String getAccessToken(HttpServletRequest request) {
+	public static String getAppToken(HttpServletRequest request) {
 		String headerValue = request.getHeader(HEADER_AUTHORIZATION);
 
 		if (headerValue == null || !headerValue.startsWith(TOKEN_PREFIX)) {

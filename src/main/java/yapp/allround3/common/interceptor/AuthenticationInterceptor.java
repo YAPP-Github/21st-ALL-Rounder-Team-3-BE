@@ -40,7 +40,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 		}
 
 		try {
-			String appToken = JwtHeaderUtil.getAccessToken(request);
+			String appToken = JwtHeaderUtil.getAppToken(request);
 			Member member = jwtService.getMemberFromAppToken(appToken);
 
 			request.setAttribute("memberId", member.getId());

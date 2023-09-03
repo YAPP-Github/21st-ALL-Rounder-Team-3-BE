@@ -11,5 +11,4 @@ public class Allround3Application {
 	public static void main(String[] args) {
 		SpringApplication.run(Allround3Application.class, args);
 	}
-
 }
